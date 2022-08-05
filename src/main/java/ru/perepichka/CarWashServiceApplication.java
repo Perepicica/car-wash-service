@@ -1,4 +1,4 @@
-package ru.perepichka.carwashservice;
+package ru.perepichka;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

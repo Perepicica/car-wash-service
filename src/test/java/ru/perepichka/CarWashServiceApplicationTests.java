@@ -1,4 +1,4 @@
-package ru.perepichka.carwashservice;
+package ru.perepichka;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
