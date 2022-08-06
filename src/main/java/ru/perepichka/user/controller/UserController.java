@@ -54,21 +54,20 @@ public class UserController {
             GetUserDTO userResponse = user.getAsGetUserDTO();
             return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
         } catch (EmailAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GetUserDTO> updateUserRole(@PathVariable(name = "id") String id,
-                                                     @RequestBody @Valid RoleUpdateUserDTO statusDTO) {
+    public ResponseEntity<GetUserDTO> updateUserRole(@PathVariable(name = "id") String id, @RequestBody @Valid RoleUpdateUserDTO statusDTO) {
         try {
             User user = userServiceImpl.updateUserRole(id, statusDTO.getAsUserRole());
             GetUserDTO userResponse = user.getAsGetUserDTO();
             return new ResponseEntity<>(userResponse, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 

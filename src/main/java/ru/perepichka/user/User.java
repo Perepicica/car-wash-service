@@ -37,12 +37,12 @@ public class User {
     private boolean isActive = true;
 
     public GetUserDTO getAsGetUserDTO() {
-        GetUserDTO getUserDTO = new GetUserDTO();
-        getUserDTO.setId(id);
-        getUserDTO.setName(name);
-        getUserDTO.setEmail(email);
-        getUserDTO.setRole(role.name());
-        return getUserDTO;
+        GetUserDTO dto = new GetUserDTO();
+        dto.setId(id);
+        dto.setName(name);
+        dto.setEmail(email);
+        dto.setRole(role.name());
+        return dto;
     }
 
     public enum Role {
