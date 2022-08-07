@@ -1,10 +1,14 @@
 package ru.perepichka.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.perepichka.exception.EmailAlreadyExistsException;
-import ru.perepichka.exception.NoSuchIdException;
+import ru.perepichka.exception.NoDataInDatabaseException;
+import ru.perepichka.exception.IdNotFoundException;
+import ru.perepichka.user.controller.dto.GetUserDTO;
 import ru.perepichka.user.specification.UserFilters;
 import ru.perepichka.user.specification.UserSpecification;
 
@@ -12,40 +16,56 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@Service
 @Transactional
+@Service
 public class UserServiceImpl implements UserService {
+
+    private static final String INVALID_ID_EXC = "User not found, id: ";
 
     private final UserRepository userRepository;
 
     @Override
-    public List<User> getUsers() {
-        return userRepository.findAll(UserSpecification.getFilteredUsers(new UserFilters()));
-    }
+    public Page<GetUserDTO> getUsers(Pageable pageable) {
+        Page<GetUserDTO> users = userRepository
+                .findAll(UserSpecification.getFilteredUsers(new UserFilters()), pageable)
+                .map(User::getAsGetUserDTO);
 
-    @Override
-    public Optional<User> getUser(String id) {
-        return userRepository.findById(id);
-    }
-
-    @Override
-    public User createUser(User user) {
-        UserFilters filters = UserFilters.builder().email(user.getEmail()).build();
-        List<User> usersWithSameEmail = userRepository.findAll(UserSpecification.getFilteredUsers(filters));
-        if (!usersWithSameEmail.isEmpty()) {
-            throw new EmailAlreadyExistsException("User with email " + user.getEmail() + " already exists");
+        if (users.isEmpty()) {
+            throw new NoDataInDatabaseException();
         }
-        return userRepository.save(user);
+        return users;
     }
 
     @Override
-    public User updateUserRole(String id, User.Role newRole) {
+    public GetUserDTO getUser(String id) {
+        Optional<User> user = userRepository.findById(id);
+
+        if (user.isPresent()) {
+            return user.get().getAsGetUserDTO();
+        } else {
+            throw new IdNotFoundException(INVALID_ID_EXC + id);
+        }
+    }
+
+    @Override
+    public GetUserDTO createUser(User user) {
+        UserFilters filters = UserFilters.builder().email(user.getEmail()).isActive(true).build();
+        List<User> usersWithSameEmail = userRepository.findAll(UserSpecification.getFilteredUsers(filters));
+
+        if (usersWithSameEmail.isEmpty()) {
+            return userRepository.save(user).getAsGetUserDTO();
+        }
+        throw new EmailAlreadyExistsException(user.getEmail());
+    }
+
+    @Override
+    public GetUserDTO updateUserRole(String id, User.Role newRole) {
         return userRepository.findById(id)
                 .map(dbUser -> {
                     dbUser.setRole(newRole);
-                    return userRepository.save(dbUser);
+                    return userRepository.save(dbUser).getAsGetUserDTO();
                 })
-                .orElseThrow(() -> new NoSuchIdException("Employee with such id: " + id + "not found"));
+                .orElseThrow(() -> new IdNotFoundException(INVALID_ID_EXC + id));
     }
 
     @Override
@@ -56,7 +76,7 @@ public class UserServiceImpl implements UserService {
             user.setActive(false);
             userRepository.save(user);
         } else {
-            throw new NoSuchIdException("No user with such id: " + id);
+            throw new IdNotFoundException(INVALID_ID_EXC + id);
         }
     }
 }

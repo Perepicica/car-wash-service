@@ -1,16 +1,17 @@
 package ru.perepichka.user;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import ru.perepichka.user.controller.dto.GetUserDTO;
 
 public interface UserService {
-    List<User> getUsers();
+    Page<GetUserDTO> getUsers(Pageable pageable);
 
-    Optional<User> getUser(String id);
+    GetUserDTO getUser(String id);
 
-    User createUser(User user);
+    GetUserDTO createUser(User user);
 
-    User updateUserRole(String id, User.Role newRole);
+    GetUserDTO updateUserRole(String id, User.Role newRole);
 
     void deleteUser(String id);
 }
