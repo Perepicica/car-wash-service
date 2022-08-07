@@ -3,6 +3,7 @@ package ru.perepichka.service;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import ru.perepichka.service.dto.GetServiceDTO;
 
 import javax.persistence.*;
 
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "service")
-public class Service {
+public class WashService {
 
     @Id
     @GeneratedValue(generator = "system-uuid")
@@ -19,14 +20,24 @@ public class Service {
     private String id;
 
     @Column(name = "name")
-    String name;
+    private String name;
 
     @Column(name = "duration")
-    Integer duration;
+    private Integer duration;
 
     @Column(name = "cost")
-    Integer cost;
+    private Integer cost;
 
     @Column(name = "discount")
-    Integer discount;
+    private Integer discount;
+
+    public GetServiceDTO getAsGetServiceDTO(){
+        GetServiceDTO dto = new GetServiceDTO();
+        dto.setId(id);
+        dto.setName(name);
+        dto.setDuration(duration);
+        dto.setCost(cost);
+        dto.setDiscount(discount);
+        return dto;
+    }
 }
