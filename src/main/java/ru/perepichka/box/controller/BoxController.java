@@ -4,16 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.perepichka.box.Box;
 import ru.perepichka.box.BoxServiceImpl;
 import ru.perepichka.box.controller.dto.GetBoxDTO;
 import ru.perepichka.box.controller.dto.PostPutBoxDTO;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,52 +18,34 @@ public class BoxController {
 
     private final BoxServiceImpl boxServiceImpl;
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public ResponseEntity<Page<GetBoxDTO>> getAllBoxes(Pageable pageable) {
-        Page<GetBoxDTO> boxes = boxServiceImpl.getAllBoxes(pageable);
-        return new ResponseEntity<>(boxes, HttpStatus.OK);
+    public Page<GetBoxDTO> getAllBoxes(Pageable pageable) {
+        return boxServiceImpl.getAllBoxes(pageable);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public ResponseEntity<GetBoxDTO> getBoxById(@PathVariable(name = "id") String id) {
-        Optional<Box> box = boxServiceImpl.getBox(id);
-        if (box.isPresent()) {
-            GetBoxDTO boxResponse = box.get().getAsGetBoxDTO();
-            return new ResponseEntity<>(boxResponse, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public GetBoxDTO getBoxById(@PathVariable(name = "id") String id) {
+        return boxServiceImpl.getBox(id);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ResponseEntity<GetBoxDTO> createBox(@RequestBody @Valid PostPutBoxDTO boxDTO) {
-        try {
-            Box boxRequest = boxDTO.getAsBox();
-            Box box = boxServiceImpl.createBox(boxRequest);
-            GetBoxDTO boxResponse = box.getAsGetBoxDTO();
-            return new ResponseEntity<>(boxResponse, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public GetBoxDTO createBox(@RequestBody @Valid PostPutBoxDTO boxDTO) {
+        return boxServiceImpl.createBox(boxDTO.getAsBox());
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
-    public ResponseEntity<GetBoxDTO> updateBox(@PathVariable(name = "id") String id,
-                                               @RequestBody @Valid PostPutBoxDTO boxDTO) {
-        Box boxRequest = boxDTO.getAsBox();
-        Box box = boxServiceImpl.updateBox(id, boxRequest);
-        GetBoxDTO boxResponse = box.getAsGetBoxDTO();
-        return new ResponseEntity<>(boxResponse, HttpStatus.OK);
+    public GetBoxDTO updateBox(@PathVariable(name = "id") String id,
+                               @RequestBody @Valid PostPutBoxDTO boxDTO) {
+        return boxServiceImpl.updateBox(id, boxDTO.getAsBox());
     }
 
-
+    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBox(@PathVariable(name = "id") String id) {
-        try {
-            boxServiceImpl.deleteBox(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public void deleteBox(@PathVariable(name = "id") String id) {
+        boxServiceImpl.deleteBox(id);
     }
 }

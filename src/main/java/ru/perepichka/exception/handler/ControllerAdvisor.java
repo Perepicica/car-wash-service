@@ -6,10 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.perepichka.exception.EmailAlreadyExistsException;
-import ru.perepichka.exception.IdNotFoundException;
-import ru.perepichka.exception.InvalidRoleTypeException;
-import ru.perepichka.exception.NoDataInDatabaseException;
+import ru.perepichka.exception.*;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
@@ -28,8 +25,13 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(getBody(exc), HttpStatus.NO_CONTENT);
     }
 
-    @ExceptionHandler({EmailAlreadyExistsException.class, InvalidRoleTypeException.class})
-    public ResponseEntity<Object> handleBadArgument(RuntimeException exc, WebRequest request) {
+    @ExceptionHandler({
+            EmailAlreadyExistsException.class,
+            InvalidRoleTypeException.class,
+            InvalidTimeException.class,
+            InvalidCoefficientException.class
+    })
+    public ResponseEntity<Object> handleBadArgumentException(RuntimeException exc, WebRequest request) {
         return new ResponseEntity<>(getBody(exc), HttpStatus.BAD_REQUEST);
     }
 
