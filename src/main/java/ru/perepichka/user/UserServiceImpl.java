@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.perepichka.exception.EmailAlreadyExistsException;
 import ru.perepichka.exception.NoDataInDatabaseException;
 import ru.perepichka.exception.IdNotFoundException;
-import ru.perepichka.user.controller.dto.GetUserDTO;
+import ru.perepichka.user.dto.GetUserDTO;
 import ru.perepichka.user.specification.UserFilters;
 import ru.perepichka.user.specification.UserSpecification;
 

@@ -1,4 +1,4 @@
-package ru.perepichka.box.controller.dto;
+package ru.perepichka.box.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;

@@ -1,14 +1,13 @@
-package ru.perepichka.user.controller;
+package ru.perepichka.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.perepichka.user.UserServiceImpl;
-import ru.perepichka.user.controller.dto.GetUserDTO;
-import ru.perepichka.user.controller.dto.PostUserDTO;
-import ru.perepichka.user.controller.dto.RoleUpdateUserDTO;
+import ru.perepichka.user.dto.GetUserDTO;
+import ru.perepichka.user.dto.PostUserDTO;
+import ru.perepichka.user.dto.RoleUpdateUserDTO;
 
 import javax.validation.Valid;
 
@@ -39,7 +38,8 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
-    public GetUserDTO updateUserRole(@PathVariable(name = "id") String id, @RequestBody @Valid RoleUpdateUserDTO statusDTO) {
+    public GetUserDTO updateUserRole(@PathVariable(name = "id") String id,
+                                     @RequestBody @Valid RoleUpdateUserDTO statusDTO) {
             return userServiceImpl.updateUserRole(id, statusDTO.getAsUserRole());
     }
 

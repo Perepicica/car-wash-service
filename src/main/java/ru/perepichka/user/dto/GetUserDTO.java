@@ -1,4 +1,4 @@
-package ru.perepichka.user.controller.dto;
+package ru.perepichka.user.dto;
 
 import lombok.Getter;
 import lombok.Setter;

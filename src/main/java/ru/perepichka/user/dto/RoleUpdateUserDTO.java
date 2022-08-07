@@ -1,4 +1,4 @@
-package ru.perepichka.user.controller.dto;
+package ru.perepichka.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;

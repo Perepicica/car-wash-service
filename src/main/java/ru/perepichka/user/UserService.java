@@ -2,7 +2,7 @@ package ru.perepichka.user;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import ru.perepichka.user.controller.dto.GetUserDTO;
+import ru.perepichka.user.dto.GetUserDTO;
 
 public interface UserService {
     Page<GetUserDTO> getUsers(Pageable pageable);
