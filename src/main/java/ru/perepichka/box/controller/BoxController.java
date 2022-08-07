@@ -1,6 +1,8 @@
 package ru.perepichka.box.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,14 +23,8 @@ public class BoxController {
     private final BoxServiceImpl boxServiceImpl;
 
     @GetMapping
-    public ResponseEntity<List<GetBoxDTO>> getAllBoxes() {
-        List<GetBoxDTO> boxes = boxServiceImpl.getAllBoxes()
-                .stream()
-                .map(Box::getAsGetBoxDTO)
-                .toList();
-        if (boxes.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+    public ResponseEntity<Page<GetBoxDTO>> getAllBoxes(Pageable pageable) {
+        Page<GetBoxDTO> boxes = boxServiceImpl.getAllBoxes(pageable);
         return new ResponseEntity<>(boxes, HttpStatus.OK);
     }
 

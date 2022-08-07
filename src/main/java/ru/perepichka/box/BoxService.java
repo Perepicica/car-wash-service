@@ -1,11 +1,14 @@
 package ru.perepichka.box;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import ru.perepichka.box.controller.dto.GetBoxDTO;
+
 import java.util.Optional;
 
 public interface BoxService {
 
-    List<Box> getAllBoxes();
+    Page<GetBoxDTO> getAllBoxes(Pageable pageable);
 
     Optional<Box> getBox(String id);
 

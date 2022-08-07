@@ -1,11 +1,15 @@
 package ru.perepichka.box;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.perepichka.exception.NoSuchIdException;
+import ru.perepichka.box.controller.dto.GetBoxDTO;
+import ru.perepichka.exception.IdNotFoundException;
+import ru.perepichka.exception.NoDataInDatabaseException;
 import ru.perepichka.user.UserServiceImpl;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +22,14 @@ public class BoxServiceImpl implements BoxService {
     private final UserServiceImpl userServiceImpl;
 
     @Override
-    public List<Box> getAllBoxes() {
-        return boxRepository.findAll();
+    public Page<GetBoxDTO> getAllBoxes(Pageable pageable) {
+        Page<GetBoxDTO> boxes = boxRepository
+                .findAll(pageable)
+                .map(Box::getAsGetBoxDTO);
+        if(boxes.isEmpty()){
+            throw new NoDataInDatabaseException();
+        }
+        return boxes;
     }
 
     @Override
@@ -29,7 +39,6 @@ public class BoxServiceImpl implements BoxService {
 
     @Override
     public Box createBox(Box box) {
-        box.setOperator(userServiceImpl.getUser(box.getOperator().getId()).get());
         return boxRepository.save(box);
     }
 
@@ -42,7 +51,7 @@ public class BoxServiceImpl implements BoxService {
             box.setWorkCoefficient(newBox.getWorkCoefficient());
             box.setOperator(newBox.getOperator());
             return boxRepository.save(box);
-        }).orElseThrow(() -> new NoSuchIdException("Box with such id: " + id + " not found"));
+        }).orElseThrow(() -> new IdNotFoundException("Box with such id: " + id + " not found"));
     }
 
     @Override
