@@ -1,0 +1,1 @@
+ALTER TABLE appointment ADD duration NUMERIC;
