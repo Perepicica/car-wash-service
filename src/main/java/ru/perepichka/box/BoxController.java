@@ -1,13 +1,12 @@
-package ru.perepichka.box.controller;
+package ru.perepichka.box;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.perepichka.box.BoxServiceImpl;
-import ru.perepichka.box.controller.dto.GetBoxDTO;
-import ru.perepichka.box.controller.dto.PostPutBoxDTO;
+import ru.perepichka.box.dto.GetBoxDTO;
+import ru.perepichka.box.dto.PostPutBoxDTO;
 
 import javax.validation.Valid;
 

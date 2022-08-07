@@ -2,7 +2,7 @@ package ru.perepichka.box;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import ru.perepichka.box.controller.dto.GetBoxDTO;
+import ru.perepichka.box.dto.GetBoxDTO;
 
 public interface BoxService {
 

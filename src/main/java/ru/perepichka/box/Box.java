@@ -3,7 +3,7 @@ package ru.perepichka.box;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import ru.perepichka.box.controller.dto.GetBoxDTO;
+import ru.perepichka.box.dto.GetBoxDTO;
 import ru.perepichka.user.User;
 
 import javax.persistence.*;

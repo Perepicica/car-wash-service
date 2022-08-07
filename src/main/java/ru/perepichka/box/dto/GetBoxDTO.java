@@ -1,8 +1,8 @@
-package ru.perepichka.box.controller.dto;
+package ru.perepichka.box.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.perepichka.user.controller.dto.GetUserDTO;
+import ru.perepichka.user.dto.GetUserDTO;
 
 @Getter
 @Setter

@@ -5,7 +5,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.perepichka.box.controller.dto.GetBoxDTO;
+import ru.perepichka.box.dto.GetBoxDTO;
 import ru.perepichka.exception.IdNotFoundException;
 import ru.perepichka.exception.NoDataInDatabaseException;
 import ru.perepichka.user.User;
