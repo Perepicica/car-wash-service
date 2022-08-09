@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.perepichka.appointment.dto.DataForBooking;
 import ru.perepichka.appointment.dto.GetAppointmentDTO;
+import ru.perepichka.appointment.dto.LocalDatePeriod;
 import ru.perepichka.box.Box;
 import ru.perepichka.box.BoxServiceImpl;
 import ru.perepichka.exception.IdNotFoundException;
@@ -62,6 +63,11 @@ public class AppointmentServiceImpl implements AppointmentService {
                     }
                 })
                 .orElseThrow(() -> new IdNotFoundException("Appointment not found, id: " + id));
+    }
+
+    @Override
+    public float getRevenue(LocalDatePeriod period) {
+        return appointmentRepository.getRevenue(period.getFrom(),period.getTill());
     }
 
     private WashService getService(String serviceId) {
