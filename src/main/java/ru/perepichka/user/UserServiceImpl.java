@@ -58,8 +58,7 @@ public class UserServiceImpl implements UserService {
                             || app.getStatus().equals(Appointment.Status.CONFIRMED));
         } else {
             appStream = appStream
-                    .filter(app -> app.getStatus().equals(Appointment.Status.DONE)
-                            || app.getStatus().equals(Appointment.Status.CANCELED));
+                    .filter(app -> app.getStatus().equals(Appointment.Status.DONE));
         }
 
         return appStream.map(Appointment::GetAsAppointmentForUserDTO).toList();
