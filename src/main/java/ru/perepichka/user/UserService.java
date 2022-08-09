@@ -12,7 +12,7 @@ public interface UserService {
 
     GetUserDTO getUser(String id);
 
-    List<GetAppointmentForUserDTO> getUserAppointments(String id);
+    List<GetAppointmentForUserDTO> getUserAppointments(String id, boolean active);
 
     GetUserDTO createUser(User user);
 

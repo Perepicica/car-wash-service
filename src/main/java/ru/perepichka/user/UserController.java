@@ -34,8 +34,9 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}/appointments")
-    public List<GetAppointmentForUserDTO> getUserAppointments(@PathVariable(name = "id") String id){
-        return userServiceImpl.getUserAppointments(id);
+    public List<GetAppointmentForUserDTO> getUserAppointments(@PathVariable(name = "id") String id,
+                                                              @RequestParam(value = "active", required = false, defaultValue = "true") boolean active) {
+        return userServiceImpl.getUserAppointments(id, active);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -48,13 +49,13 @@ public class UserController {
     @PutMapping("/{id}")
     public GetUserDTO updateUserRole(@PathVariable(name = "id") String id,
                                      @RequestBody @Valid RoleUpdateUserDTO statusDTO) {
-            return userServiceImpl.updateUserRole(id, statusDTO.getAsUserRole());
+        return userServiceImpl.updateUserRole(id, statusDTO.getAsUserRole());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable(name = "id") String id) {
-            userServiceImpl.deleteUser(id);
+        userServiceImpl.deleteUser(id);
     }
 
 }

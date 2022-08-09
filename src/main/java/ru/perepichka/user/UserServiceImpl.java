@@ -16,6 +16,7 @@ import ru.perepichka.user.specification.UserSpecification;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Transactional
@@ -45,13 +46,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<GetAppointmentForUserDTO> getUserAppointments(String id) {
+    public List<GetAppointmentForUserDTO> getUserAppointments(String id, boolean active) {
         Optional<User> optionalUser = userRepository.findById(id);
         User user = checkIfUserExists(optionalUser, id);
-        return user.getAppointments()
-                .stream()
-                .map(Appointment::GetAsAppointmentForUserDTO)
-                .toList();
+
+        Stream<Appointment> appStream = user.getAppointments().stream();
+
+        if (active) {
+            appStream = appStream
+                    .filter(app -> app.getStatus().equals(Appointment.Status.BOOKED)
+                            || app.getStatus().equals(Appointment.Status.CONFIRMED));
+        } else {
+            appStream = appStream
+                    .filter(app -> app.getStatus().equals(Appointment.Status.DONE)
+                            || app.getStatus().equals(Appointment.Status.CANCELED));
+        }
+
+        return appStream.map(Appointment::GetAsAppointmentForUserDTO).toList();
     }
 
     @Override
