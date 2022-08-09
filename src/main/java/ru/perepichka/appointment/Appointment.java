@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import ru.perepichka.appointment.dto.GetAppointmentDTO;
 import ru.perepichka.box.Box;
 import ru.perepichka.service.WashService;
 import ru.perepichka.user.User;
@@ -23,11 +24,14 @@ public class Appointment {
     @Column(name = "id", columnDefinition = "varchar")
     private String id;
 
-    @Column(name = "date")
+    @Column(name = "app_date")
     private LocalDate date;
 
-    @Column(name = "time")
-    private LocalTime time;
+    @Column(name = "starts_at")
+    private LocalTime startsAt;
+
+    @Column(name = "ends_at")
+    private LocalTime endsAt;
 
     @Column(name = "status")
     private Status status = Status.BOOKED;
@@ -35,8 +39,6 @@ public class Appointment {
     @Column(name = "cost")
     private Float cost;
 
-    @Column(name = "duration")
-    private Float duration;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "customer_id")
@@ -52,6 +54,21 @@ public class Appointment {
     @JoinColumn(name = "service_id")
     @JsonBackReference
     private WashService service;
+
+    public GetAppointmentDTO getAsGetAppointmentDTO() {
+        GetAppointmentDTO dto = new GetAppointmentDTO();
+        dto.setId(id);
+        dto.setDate(date);
+        dto.setStartsAt(startsAt);
+        dto.setEndsAt(endsAt);
+        dto.setStatus(status.name());
+        dto.setCost(cost);
+        dto.setCustomer(customer.getAsGetUserDTO());
+        dto.setBox(box.getAsGetBoxDTO());
+        dto.setService(service.getAsGetServiceDTO());
+        return dto;
+
+    }
 
     public enum Status {
         BOOKED, CONFIRMED, CANCELED, DONE

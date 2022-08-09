@@ -5,6 +5,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.perepichka.appointment.dto.DataForBooking;
 import ru.perepichka.box.dto.GetBoxDTO;
 import ru.perepichka.exception.IdNotFoundException;
 import ru.perepichka.exception.NoDataInDatabaseException;
@@ -13,6 +14,7 @@ import ru.perepichka.user.UserRepository;
 
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -73,6 +75,11 @@ public class BoxServiceImpl implements BoxService {
         } catch (EmptyResultDataAccessException e) {
             throw new IdNotFoundException(INVALID_ID_EXC + id);
         }
+    }
+
+    @Override
+    public List<Box> getAvailableBoxes(DataForBooking data) {
+        return boxRepository.getAvailableBoxes(data.getOnDate(), data.getOnTime(), data.getDuration());
     }
 
     private User getOperator(String id) {

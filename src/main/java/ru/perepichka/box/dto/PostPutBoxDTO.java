@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.perepichka.box.Box;
 import ru.perepichka.exception.InvalidCoefficientException;
-import ru.perepichka.exception.InvalidTimeException;
+import ru.perepichka.exception.InvalidDateTimeException;
 import ru.perepichka.user.User;
 
 import javax.validation.constraints.NotEmpty;
@@ -42,10 +42,11 @@ public class PostPutBoxDTO {
 
     @JsonIgnore
     private LocalTime getLocalTime(String time){
+        String format = "HH:mm";
         try {
-            return LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
+            return LocalTime.parse(time, DateTimeFormatter.ofPattern(format));
         } catch (DateTimeParseException e){
-            throw new InvalidTimeException();
+            throw new InvalidDateTimeException(format);
         }
     }
 

@@ -15,7 +15,7 @@ import java.util.Map;
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(IdNotFoundException.class)
+    @ExceptionHandler({IdNotFoundException.class, NoOptionsForBookingException.class})
     public ResponseEntity<Object> handleIdNotFoundException(IdNotFoundException exc, WebRequest request) {
         return new ResponseEntity<>(getBody(exc), HttpStatus.NOT_FOUND);
     }
@@ -28,7 +28,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler({
             EmailAlreadyExistsException.class,
             InvalidRoleTypeException.class,
-            InvalidTimeException.class,
+            InvalidDateTimeException.class,
             InvalidCoefficientException.class
     })
     public ResponseEntity<Object> handleBadArgumentException(RuntimeException exc, WebRequest request) {
