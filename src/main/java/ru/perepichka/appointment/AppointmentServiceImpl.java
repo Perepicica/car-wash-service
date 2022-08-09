@@ -14,7 +14,6 @@ import ru.perepichka.service.WashServiceRepository;
 import ru.perepichka.user.User;
 import ru.perepichka.user.UserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,35 +30,31 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
 
     public GetAppointmentDTO createAppointment(DataForBooking data) {
-        List<WashService> servicesForApp = getServices(data.getServicesId());
-        Box box = getBox(data, servicesForApp);
+        WashService serviceForApp = getServices(data.getServiceId());
+        Box box = getBox(data, serviceForApp);
 
         Appointment appointment = new Appointment();
         appointment.setDate(data.getOnDate());
         appointment.setStartsAt(data.getOnTime());
         appointment.setEndsAt(data.getOnTime().plusMinutes((long) (data.getDuration() * box.getWorkCoefficient())));
-        appointment.setCost(getCostWithDiscount(servicesForApp));
+        appointment.setCost(getCostWithDiscount(serviceForApp));
         appointment.setBox(box);
-        appointment.setService(servicesForApp.stream().findFirst().get());
-        appointment.setCustomer(getCustomer(data.getCustomer().getId()));
+        appointment.setService(serviceForApp);
+        appointment.setCustomer(getCustomer(data.getCustomerId()));
 
         return appointmentRepository.save(appointment).getAsGetAppointmentDTO();
     }
 
-    private List<WashService> getServices(List<String> servicesId) {
-        List<WashService> services = new ArrayList<>();
-        for (String id : servicesId) {
-            Optional<WashService> service = washServiceRepository.findById(id);
-            if (service.isEmpty()) {
-                throw new IdNotFoundException("Service not found, id: " + id);
-            }
-            services.add(service.get());
+    private WashService getServices(String serviceId) {
+        Optional<WashService> service = washServiceRepository.findById(serviceId);
+        if (service.isEmpty()) {
+            throw new IdNotFoundException("Service not found, id: " + serviceId);
         }
-        return services;
+        return service.get();
     }
 
-    private Box getBox(DataForBooking data, List<WashService> services) {
-        data.setDuration(countDuration(services));
+    private Box getBox(DataForBooking data, WashService service) {
+        data.setDuration(service.getDuration());
         List<Box> boxes = boxServiceImpl.getAvailableBoxes(data);
 
         if (boxes.isEmpty()) {
@@ -83,14 +78,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         return boxForAppointment.get();
     }
 
-    private int countDuration(List<WashService> services) {
-        int duration = 0;
-        for (WashService service : services) {
-            duration += service.getDuration();
-        }
-        return duration;
-    }
-
     private User getCustomer(String id) {
         Optional<User> customer = userRepository.findById(id);
         if (customer.isEmpty()) {
@@ -99,11 +86,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         return customer.get();
     }
 
-    private float getCostWithDiscount(List<WashService> services) {
-        float sum = 0;
-        for (WashService service : services) {
-            sum += (service.getCost() / 100.0) * (100 - service.getDiscount());
-        }
-        return sum;
+    private float getCostWithDiscount(WashService service) {
+        return (float) (service.getCost() / 100.0) * (100 - service.getDiscount());
     }
 }

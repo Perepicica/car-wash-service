@@ -23,20 +23,16 @@ public class PostAppointmentDTO {
     @NotEmpty
     String onTime;
     @NotEmpty
-    List<String> services;
+    String serviceId;
 
     @JsonIgnore
     public DataForBooking getAsDataForBooking(){
         DataForBooking data = new DataForBooking();
 
-        User customer = new User();
-        customer.setId(customerId);
-        data.setCustomer(customer);
-
+        data.setCustomerId(customerId);
         data.setOnDate(getLocalDate(onDate));
         data.setOnTime(getLocalTime(onTime));
-
-        data.setServicesId(services);
+        data.setServiceId(serviceId);
 
         return data;
     }
