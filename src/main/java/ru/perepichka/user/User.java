@@ -1,6 +1,7 @@
 package ru.perepichka.user;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 import ru.perepichka.appointment.Appointment;
+import ru.perepichka.box.Box;
 import ru.perepichka.user.dto.GetUserDTO;
 
 import javax.persistence.*;
@@ -41,13 +43,16 @@ public class User {
     @Column(name = "is_active")
     private boolean isActive = true;
 
-    @OneToMany(
-            mappedBy = "customer",
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
-            })
+    @OneToMany(mappedBy = "customer",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonManagedReference
     @Fetch(FetchMode.JOIN)
     private Set<Appointment> appointments;
+
+    @OneToOne(mappedBy = "operator",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonBackReference
+    private Box box;
 
     public GetUserDTO getAsGetUserDTO() {
         GetUserDTO dto = new GetUserDTO();

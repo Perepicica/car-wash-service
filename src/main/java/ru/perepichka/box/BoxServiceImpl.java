@@ -9,6 +9,7 @@ import ru.perepichka.appointment.dto.DataForBooking;
 import ru.perepichka.box.dto.GetBoxDTO;
 import ru.perepichka.exception.IdNotFoundException;
 import ru.perepichka.exception.NoDataInDatabaseException;
+import ru.perepichka.exception.OperatorAssigningException;
 import ru.perepichka.user.User;
 import ru.perepichka.user.UserRepository;
 
@@ -52,7 +53,7 @@ public class BoxServiceImpl implements BoxService {
 
     @Override
     public GetBoxDTO createBox(Box box) {
-        box.setOperator(getOperator(box.getOperator().getId()));
+        box.setOperator(getAndCheckOperator(box.getOperator().getId()));
         return boxRepository.save(box).getAsGetBoxDTO();
     }
 
@@ -63,7 +64,7 @@ public class BoxServiceImpl implements BoxService {
             box.setOpensAt(newBox.getOpensAt());
             box.setClosesAt(newBox.getClosesAt());
             box.setWorkCoefficient(newBox.getWorkCoefficient());
-            box.setOperator(getOperator(newBox.getOperator().getId()));
+            box.setOperator(getAndCheckOperator(newBox.getOperator().getId()));
             return boxRepository.save(box).getAsGetBoxDTO();
         }).orElseThrow(() -> new IdNotFoundException(INVALID_ID_EXC + id));
     }
@@ -86,12 +87,24 @@ public class BoxServiceImpl implements BoxService {
                 data.getAppointmentId());
     }
 
-    private User getOperator(String id) {
+    private User getAndCheckOperator(String id) {
         Optional<User> operator = userRepository.findById(id);
-        if (operator.isPresent()) {
-            return operator.get();
+
+        if (operator.isEmpty()) {
+            throw new IdNotFoundException(INVALID_OPERATOR_ID_EXC + id);
         }
-        throw new IdNotFoundException(INVALID_OPERATOR_ID_EXC + id);
+
+        if (operator.get().getRole() != User.Role.OPERATOR) {
+            throw new OperatorAssigningException("This user isn't an operator");
+        }
+
+        if (operator.get().getBox() != null) {
+            throw new OperatorAssigningException(
+                    "This operator is already assigned to box " + operator.get().getBox().getName()
+            );
+        }
+
+        return operator.get();
     }
 
 }
