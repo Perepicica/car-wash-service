@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.perepichka.appointment.Appointment;
+import ru.perepichka.appointment.dto.GetAppointmentForUserDTO;
 import ru.perepichka.exception.EmailAlreadyExistsException;
 import ru.perepichka.exception.NoDataInDatabaseException;
 import ru.perepichka.exception.IdNotFoundException;
@@ -39,12 +41,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public GetUserDTO getUser(String id) {
         Optional<User> user = userRepository.findById(id);
+        return checkIfUserExists(user, id).getAsGetUserDTO();
+    }
 
-        if (user.isPresent()) {
-            return user.get().getAsGetUserDTO();
-        } else {
-            throw new IdNotFoundException(INVALID_ID_EXC + id);
-        }
+    @Override
+    public List<GetAppointmentForUserDTO> getUserAppointments(String id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        User user = checkIfUserExists(optionalUser, id);
+        return user.getAppointments()
+                .stream()
+                .map(Appointment::GetAsAppointmentForUserDTO)
+                .toList();
     }
 
     @Override
@@ -75,6 +82,14 @@ public class UserServiceImpl implements UserService {
             User user = optUser.get();
             user.setActive(false);
             userRepository.save(user);
+        } else {
+            throw new IdNotFoundException(INVALID_ID_EXC + id);
+        }
+    }
+
+    public User checkIfUserExists(Optional<User> user, String id) {
+        if (user.isPresent()) {
+            return user.get();
         } else {
             throw new IdNotFoundException(INVALID_ID_EXC + id);
         }

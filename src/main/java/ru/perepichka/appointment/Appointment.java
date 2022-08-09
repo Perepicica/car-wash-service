@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import ru.perepichka.appointment.dto.GetAppointmentDTO;
+import ru.perepichka.appointment.dto.GetAppointmentForUserDTO;
 import ru.perepichka.box.Box;
 import ru.perepichka.service.WashService;
 import ru.perepichka.user.User;
@@ -67,7 +68,18 @@ public class Appointment {
         dto.setBox(box.getAsGetBoxDTO());
         dto.setService(service.getAsGetServiceDTO());
         return dto;
+    }
 
+    public GetAppointmentForUserDTO GetAsAppointmentForUserDTO(){
+        GetAppointmentForUserDTO dto = new GetAppointmentForUserDTO();
+        dto.setId(id);
+        dto.setDate(date);
+        dto.setStartsAt(startsAt);
+        dto.setEndsAt(endsAt);
+        dto.setStatus(status.name());
+        dto.setCost(cost);
+        dto.setService(service.getId());
+        return dto;
     }
 
     public enum Status {
