@@ -24,6 +24,8 @@ public interface BoxRepository extends JpaRepository<Box, String>, JpaSpecificat
                         " where ("+
                             "(app.app_date = :on_date)"+
                             " and "+
+                            "app.id <> :id"+
+                            " and "+
                             "((CAST(:app_starts_at as TIME) between app.starts_at and app.ends_at)"+
                             "or"+
                             "((CAST(:app_starts_at as TIME) + ((:duration * interval '1 minute') * service_db.service_schema.box.work_coefficient))  between app.starts_at and app.ends_at)"+
@@ -33,5 +35,6 @@ public interface BoxRepository extends JpaRepository<Box, String>, JpaSpecificat
             ,nativeQuery = true)
     List<Box> getAvailableBoxes(@Param("on_date") LocalDate onDate,
                                 @Param("app_starts_at") LocalTime startsAt,
-                                @Param("duration") int duration);
+                                @Param("duration") int duration,
+                                @Param("id")String appId);
 }

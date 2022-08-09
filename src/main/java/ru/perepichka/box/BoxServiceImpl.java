@@ -79,7 +79,11 @@ public class BoxServiceImpl implements BoxService {
 
     @Override
     public List<Box> getAvailableBoxes(DataForBooking data) {
-        return boxRepository.getAvailableBoxes(data.getOnDate(), data.getOnTime(), data.getDuration());
+        return boxRepository.getAvailableBoxes(
+                data.getOnDate(),
+                data.getOnTime(),
+                data.getDuration(),
+                data.getAppointmentId());
     }
 
     private User getOperator(String id) {

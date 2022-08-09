@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.perepichka.appointment.dto.GetAppointmentDTO;
 import ru.perepichka.appointment.dto.PostAppointmentDTO;
+import ru.perepichka.appointment.dto.PutAppointmentDTO;
 
 import javax.validation.Valid;
 
@@ -19,6 +20,12 @@ public class AppointmentController {
     @PostMapping
     public GetAppointmentDTO createAppointment(@RequestBody @Valid PostAppointmentDTO dto) {
         return appointmentServiceImpl.createAppointment(dto.getAsDataForBooking());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{id}")
+    public GetAppointmentDTO updateAppointment(@PathVariable(name = "id") String id, @RequestBody @Valid PutAppointmentDTO dto) {
+        return appointmentServiceImpl.updateAppointment(id, dto.getAsDataForBooking());
     }
 
 }

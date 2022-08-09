@@ -3,6 +3,8 @@ package ru.perepichka.appointment.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import ru.perepichka.appointment.Appointment;
+import ru.perepichka.exception.InvalidAppointmentStatusException;
 import ru.perepichka.exception.InvalidDateTimeException;
 
 import javax.validation.constraints.NotEmpty;
@@ -13,26 +15,24 @@ import java.time.format.DateTimeParseException;
 
 @Getter
 @Setter
-public class PostAppointmentDTO {
-    @NotEmpty
-    private String customerId;
+public class PutAppointmentDTO {
+
     @NotEmpty
     private String onDate;
     @NotEmpty
     private String onTime;
     @NotEmpty
     private String serviceId;
+    @NotEmpty
+    private String status;
 
     @JsonIgnore
     public DataForBooking getAsDataForBooking(){
         DataForBooking data = new DataForBooking();
-
-        data.setCustomerId(customerId);
         data.setOnDate(getLocalDate(onDate));
         data.setOnTime(getLocalTime(onTime));
         data.setServiceId(serviceId);
-        data.setAppointmentId("0");
-
+        data.setStatus(getAsAppointmentStatus());
         return data;
     }
 
@@ -56,4 +56,11 @@ public class PostAppointmentDTO {
         }
     }
 
+    @JsonIgnore
+    public Appointment.Status getAsAppointmentStatus() {
+        for (Appointment.Status st : Appointment.Status.values()) {
+            if (st.name().equals(status.toUpperCase())) return st;
+        }
+        throw new InvalidAppointmentStatusException(status);
+    }
 }

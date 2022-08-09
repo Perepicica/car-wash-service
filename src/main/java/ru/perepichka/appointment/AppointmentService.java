@@ -6,4 +6,6 @@ import ru.perepichka.appointment.dto.GetAppointmentDTO;
 
 public interface AppointmentService {
     GetAppointmentDTO createAppointment(DataForBooking data);
+
+    GetAppointmentDTO updateAppointment(String id, DataForBooking data);
 }

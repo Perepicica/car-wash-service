@@ -9,6 +9,7 @@ import ru.perepichka.box.Box;
 import ru.perepichka.box.BoxServiceImpl;
 import ru.perepichka.exception.IdNotFoundException;
 import ru.perepichka.exception.NoOptionsForBookingException;
+import ru.perepichka.exception.UpdateAppointmentException;
 import ru.perepichka.service.WashService;
 import ru.perepichka.service.WashServiceRepository;
 import ru.perepichka.user.User;
@@ -30,22 +31,40 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
 
     public GetAppointmentDTO createAppointment(DataForBooking data) {
-        WashService serviceForApp = getServices(data.getServiceId());
-        Box box = getBox(data, serviceForApp);
+        WashService service = getService(data.getServiceId());
+        Box box = getBox(data, service);
 
         Appointment appointment = new Appointment();
-        appointment.setDate(data.getOnDate());
-        appointment.setStartsAt(data.getOnTime());
-        appointment.setEndsAt(data.getOnTime().plusMinutes((long) (data.getDuration() * box.getWorkCoefficient())));
-        appointment.setCost(getCostWithDiscount(serviceForApp));
-        appointment.setBox(box);
-        appointment.setService(serviceForApp);
+        updateAppointmentData(appointment, data, box, service);
         appointment.setCustomer(getCustomer(data.getCustomerId()));
 
         return appointmentRepository.save(appointment).getAsGetAppointmentDTO();
     }
 
-    private WashService getServices(String serviceId) {
+    private Appointment updateAppointmentData(Appointment appointment, DataForBooking data, Box box, WashService service) {
+        appointment.setDate(data.getOnDate());
+        appointment.setStartsAt(data.getOnTime());
+        appointment.setEndsAt(data.getOnTime().plusMinutes((long) (data.getDuration() * box.getWorkCoefficient())));
+        appointment.setCost(getCostWithDiscount(service));
+        appointment.setBox(box);
+        appointment.setService(service);
+        return appointment;
+    }
+
+    @Override
+    public GetAppointmentDTO updateAppointment(String id, DataForBooking data) {
+        return appointmentRepository.findById(id)
+                .map(appointment -> {
+                    if (appointment.getStatus() != data.getStatus()) {
+                        return appointmentRepository.save(updateStatus(appointment, data)).getAsGetAppointmentDTO();
+                    } else {
+                        return appointmentRepository.save(updateDateTimeService(appointment, data)).getAsGetAppointmentDTO();
+                    }
+                })
+                .orElseThrow(() -> new IdNotFoundException("Appointment not found, id: " + id));
+    }
+
+    private WashService getService(String serviceId) {
         Optional<WashService> service = washServiceRepository.findById(serviceId);
         if (service.isEmpty()) {
             throw new IdNotFoundException("Service not found, id: " + serviceId);
@@ -88,5 +107,25 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     private float getCostWithDiscount(WashService service) {
         return (float) (service.getCost() / 100.0) * (100 - service.getDiscount());
+    }
+
+    private Appointment updateStatus(Appointment appointment, DataForBooking data) {
+        if (appointment.getDate().equals(data.getOnDate())
+                && appointment.getStartsAt().equals(data.getOnTime())
+                && appointment.getService().getId().equals(data.getServiceId())) {
+            appointment.setStatus(data.getStatus());
+            return appointment;
+        }
+        throw new UpdateAppointmentException();
+    }
+
+    private Appointment updateDateTimeService(Appointment appointment, DataForBooking data) {
+        WashService service = getService(data.getServiceId());
+        data.setDuration(service.getDuration());
+        data.setAppointmentId(appointment.getId());
+
+        Box box = getBox(data, service);
+
+        return updateAppointmentData(appointment, data, box, service);
     }
 }
