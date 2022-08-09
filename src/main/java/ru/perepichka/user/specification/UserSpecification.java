@@ -19,17 +19,17 @@ public class UserSpecification {
                 filterByRole(cb, root, filters.getRole()));
     }
 
-    public static Predicate filterByActive(CriteriaBuilder cb, Root<User> root, boolean active) {
+    private static Predicate filterByActive(CriteriaBuilder cb, Root<User> root, boolean active) {
         if (active) return cb.isTrue(root.get(User_.IS_ACTIVE));
         return cb.and();
     }
 
-    public static Predicate filterByEmail(CriteriaBuilder cb, Root<User> root, String email) {
+    private static Predicate filterByEmail(CriteriaBuilder cb, Root<User> root, String email) {
         if (email == null) return cb.and();
         return cb.equal(root.get(User_.EMAIL), email);
     }
 
-    public static Predicate filterByRole(CriteriaBuilder cb, Root<User> root, User.Role role) {
+    private static Predicate filterByRole(CriteriaBuilder cb, Root<User> root, User.Role role) {
         if (role == null) return cb.and();
         return cb.equal(root.get(User_.ROLE), role);
     }

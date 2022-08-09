@@ -1,12 +1,11 @@
 package ru.perepichka.appointment;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.perepichka.appointment.dto.GetAppointmentDTO;
-import ru.perepichka.appointment.dto.PeriodDTO;
-import ru.perepichka.appointment.dto.PostAppointmentDTO;
-import ru.perepichka.appointment.dto.PutAppointmentDTO;
+import ru.perepichka.appointment.dto.*;
 
 import javax.validation.Valid;
 
@@ -16,6 +15,13 @@ import javax.validation.Valid;
 public class AppointmentController {
 
     private final AppointmentServiceImpl appointmentServiceImpl;
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    public Page<GetAppointmentDTO> getAppointment(@RequestBody @Valid AppointmentFiltersDTO dto,
+                                                  Pageable pageable) {
+        return appointmentServiceImpl.getAppointments(dto.getAsAppointmentFilters(), pageable);
+    }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -31,7 +37,7 @@ public class AppointmentController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/revenue")
-    public float getRevenue(@RequestBody @Valid PeriodDTO dto){
+    public float getRevenue(@RequestBody @Valid PeriodDTO dto) {
         return appointmentServiceImpl.getRevenue(dto.getAsLocalDatePeriod());
     }
 

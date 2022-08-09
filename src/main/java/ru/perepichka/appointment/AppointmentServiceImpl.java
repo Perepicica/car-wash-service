@@ -1,11 +1,15 @@
 package ru.perepichka.appointment;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.perepichka.appointment.dto.DataForBooking;
 import ru.perepichka.appointment.dto.GetAppointmentDTO;
 import ru.perepichka.appointment.dto.LocalDatePeriod;
+import ru.perepichka.appointment.specification.AppointmentFilters;
+import ru.perepichka.appointment.specification.AppointmentsSpecification;
 import ru.perepichka.box.Box;
 import ru.perepichka.box.BoxServiceImpl;
 import ru.perepichka.exception.IdNotFoundException;
@@ -30,7 +34,15 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final BoxServiceImpl boxServiceImpl;
 
     @Override
+    public Page<GetAppointmentDTO> getAppointments(AppointmentFilters filters,Pageable pageable) {
 
+        return appointmentRepository.findAll(
+                        AppointmentsSpecification.getFilteredAppointments(filters),
+                        pageable)
+                .map(Appointment::getAsGetAppointmentDTO);
+    }
+
+    @Override
     public GetAppointmentDTO createAppointment(DataForBooking data) {
         WashService service = getService(data.getServiceId());
         Box box = getBox(data, service);
@@ -67,7 +79,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public float getRevenue(LocalDatePeriod period) {
-        return appointmentRepository.getRevenue(period.getFrom(),period.getTill());
+        return appointmentRepository.getRevenue(period.getFrom(), period.getTill());
     }
 
     private WashService getService(String serviceId) {
