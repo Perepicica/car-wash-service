@@ -14,6 +14,6 @@ public class GetAppointmentForUserDto {
     private LocalTime startsAt;
     private LocalTime endsAt;
     private String service;
-    private Float cost;
+    private float cost;
     private String status;
 }

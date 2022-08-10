@@ -13,13 +13,13 @@ import javax.validation.constraints.Positive;
 @Setter
 public class PostServiceDto {
     @NotEmpty
-    String name;
+    private String name;
     @Positive
-    Integer duration;
+    private Integer duration;
     @Positive
-    Integer cost;
+    private Integer cost;
     @Range(min = 0, max = 100)
-    Integer discount;
+    private Integer discount;
 
     @JsonIgnore
     public WashService getAsService(){

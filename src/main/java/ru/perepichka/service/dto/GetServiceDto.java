@@ -7,8 +7,8 @@ import lombok.Setter;
 @Setter
 public class GetServiceDto {
     private String id;
-    String name;
-    Integer duration;
-    Integer cost;
-    Integer discount;
+    private String name;
+    private Integer duration;
+    private Integer cost;
+    private Integer discount;
 }

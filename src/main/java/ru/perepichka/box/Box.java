@@ -40,15 +40,13 @@ public class Box {
     @JoinColumn(name = "operator_id")
     private User operator;
 
-    private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
-
     public GetBoxDto getAsGetBoxDto() {
         GetBoxDto dto = new GetBoxDto();
         dto.setId(id);
         dto.setName(name);
-        dto.setOpensAt(opensAt.format(dtf));
-        dto.setClosesAt(closesAt.format(dtf));
-        dto.setWorkCoefficient(workCoefficient.toString());
+        dto.setOpensAt(opensAt);
+        dto.setClosesAt(closesAt);
+        dto.setWorkCoefficient(workCoefficient);
         dto.setOperator(operator.getAsGetUserDto());
         return dto;
     }

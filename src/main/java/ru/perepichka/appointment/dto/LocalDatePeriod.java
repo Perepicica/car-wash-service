@@ -8,6 +8,6 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class LocalDatePeriod {
-    LocalDate from;
-    LocalDate till;
+    private LocalDate from;
+    private LocalDate till;
 }

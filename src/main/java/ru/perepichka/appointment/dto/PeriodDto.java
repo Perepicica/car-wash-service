@@ -9,8 +9,8 @@ import ru.perepichka.util.DateTimeParserUtil;
 @Setter
 public class PeriodDto {
 
-    String from;
-    String till;
+    private String from;
+    private String till;
 
     @JsonIgnore
     public LocalDatePeriod getAsLocalDatePeriod(){

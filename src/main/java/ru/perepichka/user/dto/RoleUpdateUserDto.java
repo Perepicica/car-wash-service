@@ -12,7 +12,7 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 public class RoleUpdateUserDto {
     @NotEmpty
-    String role;
+    private String role;
 
     @JsonIgnore
     public User.Role getAsUserRole() {
