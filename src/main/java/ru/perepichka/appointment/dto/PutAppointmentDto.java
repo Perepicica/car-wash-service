@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import ru.perepichka.appointment.Appointment;
+import ru.perepichka.appointment.dto.validation.AppointmentDateConstraint;
 import ru.perepichka.exception.InvalidAppointmentStatusException;
 
 import javax.validation.constraints.NotEmpty;
@@ -16,7 +17,7 @@ import java.time.LocalTime;
 @Setter
 public class PutAppointmentDto {
 
-    @NotNull
+    @AppointmentDateConstraint
     private LocalDate onDate;
     @NotNull
     private LocalTime onTime;

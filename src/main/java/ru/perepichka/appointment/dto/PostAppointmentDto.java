@@ -3,6 +3,7 @@ package ru.perepichka.appointment.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import ru.perepichka.appointment.dto.validation.AppointmentDateConstraint;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -14,7 +15,7 @@ import java.time.LocalTime;
 public class PostAppointmentDto {
     @NotEmpty
     private String customerId;
-    @NotNull
+    @AppointmentDateConstraint
     private LocalDate onDate;
     @NotNull
     private LocalTime onTime;
