@@ -20,8 +20,8 @@ public interface BoxRepository extends JpaRepository<Box, String>, JpaSpecificat
                         "inner join service_schema.appointment as app on box.id = app.box_id"+
                         " where ("+
                             "(app.app_date = :on_date)"+
-                            " and "+
-                            "app.id <> :id"+
+                            " and (app.status <> 'CANCELED') "+
+                            " and (app.id <> :id)"+
                             " and "+
                             "((CAST(:app_starts_at as TIME) between app.starts_at and app.ends_at)"+
                             "or"+
