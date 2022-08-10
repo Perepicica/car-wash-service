@@ -3,20 +3,25 @@ package ru.perepichka.appointment.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import ru.perepichka.util.DateTimeParserUtil;
+
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 public class PeriodDto {
 
-    private String from;
-    private String till;
+    @NotNull
+    private LocalDate from;
+
+    @NotNull
+    private LocalDate till;
 
     @JsonIgnore
     public LocalDatePeriod getAsLocalDatePeriod(){
         LocalDatePeriod period = new LocalDatePeriod();
-        period.setFrom(DateTimeParserUtil.getLocalDate(from));
-        period.setTill(DateTimeParserUtil.getLocalDate(till));
+        period.setFrom(from);
+        period.setTill(till);
         return period;
     }
 }

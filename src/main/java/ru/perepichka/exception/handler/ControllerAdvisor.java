@@ -23,7 +23,6 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
             IdNotFoundException.class,
             EmailAlreadyExistsException.class,
             InvalidUserRoleException.class,
-            InvalidDateTimeException.class,
             InvalidAppointmentStatusException.class,
             UpdateAppointmentException.class,
             OperatorToBoxAssigningException.class,

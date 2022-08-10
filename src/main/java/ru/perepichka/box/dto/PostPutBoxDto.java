@@ -5,20 +5,21 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.perepichka.box.Box;
 import ru.perepichka.user.User;
-import ru.perepichka.util.DateTimeParserUtil;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.time.LocalTime;
 
 @Getter
 @Setter
 public class PostPutBoxDto {
     @NotEmpty
     private String name;
-    @NotEmpty
-    private String opensAt;
-    @NotEmpty
-    private String closesAt;
+    @NotNull
+    private LocalTime opensAt;
+    @NotNull
+    private LocalTime closesAt;
     @Positive
     private float workCoefficient;
     @NotEmpty
@@ -28,8 +29,8 @@ public class PostPutBoxDto {
     public Box getAsBox() {
         Box box = new Box();
         box.setName(name);
-        box.setOpensAt(DateTimeParserUtil.getLocalTime(opensAt));
-        box.setClosesAt(DateTimeParserUtil.getLocalTime(closesAt));
+        box.setOpensAt(opensAt);
+        box.setClosesAt(closesAt);
         box.setWorkCoefficient(workCoefficient);
         User operator = new User();
         operator.setId(operatorId);

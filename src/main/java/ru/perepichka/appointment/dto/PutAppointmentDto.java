@@ -5,19 +5,21 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.perepichka.appointment.Appointment;
 import ru.perepichka.exception.InvalidAppointmentStatusException;
-import ru.perepichka.util.DateTimeParserUtil;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 
 @Getter
 @Setter
 public class PutAppointmentDto {
 
-    @NotEmpty
-    private String onDate;
-    @NotEmpty
-    private String onTime;
+    @NotNull
+    private LocalDate onDate;
+    @NotNull
+    private LocalTime onTime;
     @NotEmpty
     private String serviceId;
     @NotEmpty
@@ -26,8 +28,8 @@ public class PutAppointmentDto {
     @JsonIgnore
     public DataForBooking getAsDataForBooking(){
         DataForBooking data = new DataForBooking();
-        data.setOnDate(DateTimeParserUtil.getLocalDate(onDate));
-        data.setOnTime(DateTimeParserUtil.getLocalTime(onTime));
+        data.setOnDate(onDate);
+        data.setOnTime(onTime);
         data.setServiceId(serviceId);
         data.setStatus(getAsAppointmentStatus());
         return data;
