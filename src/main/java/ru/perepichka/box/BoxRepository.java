@@ -13,9 +13,10 @@ import java.util.List;
 @Repository
 public interface BoxRepository extends JpaRepository<Box, String>, JpaSpecificationExecutor<Box> {
 
-    @Query(value ="select box.id, box.opens_at, box.closes_at, box.work_coefficient, box.name, box.operator_id from service_schema.box as box "+
+    @Query(value ="select box.id, box.opens_at, box.closes_at, box.work_coefficient, box.name, box.operator_id, box.is_active from service_schema.box as box "+
+                    "where(box.is_active = true) "+
                     "except"+
-                    "(select box.id, box.opens_at, box.closes_at, box.work_coefficient, box.name, box.operator_id from service_schema.box as box "+
+                    "(select box.id, box.opens_at, box.closes_at, box.work_coefficient, box.name, box.operator_id, box.is_active from service_schema.box as box "+
                         "inner join service_schema.appointment as app on box.id = app.box_id"+
                         " where ("+
                             "(app.app_date = :on_date)"+

@@ -35,6 +35,7 @@ public class Appointment {
     private LocalTime endsAt;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private Status status = Status.BOOKED;
 
     @Column(name = "cost")

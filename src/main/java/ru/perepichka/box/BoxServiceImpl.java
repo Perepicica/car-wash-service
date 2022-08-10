@@ -1,12 +1,16 @@
 package ru.perepichka.box;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.perepichka.appointment.Appointment;
+import ru.perepichka.appointment.AppointmentRepository;
 import ru.perepichka.appointment.dto.DataForBooking;
+import ru.perepichka.appointment.specification.AppointmentsSpecification;
 import ru.perepichka.box.dto.GetBoxDTO;
+import ru.perepichka.box.specification.BoxSpecification;
+import ru.perepichka.exception.DeleteBoxException;
 import ru.perepichka.exception.IdNotFoundException;
 import ru.perepichka.exception.NoDataInDatabaseException;
 import ru.perepichka.exception.OperatorAssigningException;
@@ -29,10 +33,12 @@ public class BoxServiceImpl implements BoxService {
     private final BoxRepository boxRepository;
     private final UserRepository userRepository;
 
+    private final AppointmentRepository appointmentRepository;
+
     @Override
     public Page<GetBoxDTO> getAllBoxes(Pageable pageable) {
         Page<GetBoxDTO> boxes = boxRepository
-                .findAll(pageable)
+                .findAll(BoxSpecification.getActiveBoxes(),pageable)
                 .map(Box::getAsGetBoxDTO);
 
         if (boxes.isEmpty()) {
@@ -43,12 +49,7 @@ public class BoxServiceImpl implements BoxService {
 
     @Override
     public GetBoxDTO getBox(String id) {
-        Optional<Box> box = boxRepository.findById(id);
-
-        if (box.isPresent()) {
-            return box.get().getAsGetBoxDTO();
-        }
-        throw new IdNotFoundException(INVALID_ID_EXC + id);
+        return getAndCheckBox(id).getAsGetBoxDTO();
     }
 
     @Override
@@ -71,11 +72,23 @@ public class BoxServiceImpl implements BoxService {
 
     @Override
     public void deleteBox(String id) {
-        try {
-            boxRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new IdNotFoundException(INVALID_ID_EXC + id);
+        checkAppointments(id);
+        Box box = getAndCheckBox(id);
+
+        box.getOperator().setBox(null);
+        box.setOperator(null);
+        box.setActive(false);
+
+        boxRepository.save(box);
+    }
+
+    private Box getAndCheckBox(String id) {
+        Optional<Box> box = boxRepository.findById(id);
+
+        if (box.isPresent()) {
+            return box.get();
         }
+        throw new IdNotFoundException(INVALID_ID_EXC + id);
     }
 
     @Override
@@ -107,4 +120,11 @@ public class BoxServiceImpl implements BoxService {
         return operator.get();
     }
 
+    private void checkAppointments(String id) {
+        List<Appointment> appointments =
+                appointmentRepository.findAll(AppointmentsSpecification.getUndoneAppointmentsForBox(id));
+        if (!appointments.isEmpty()) {
+            throw new DeleteBoxException("This box has booked ar confirmed appointments");
+        }
+    }
 }

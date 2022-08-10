@@ -38,6 +38,7 @@ public class User {
     private String name;
 
     @Column(name = "role")
+    @Enumerated(EnumType.STRING)
     private Role role = Role.CUSTOMER;
 
     @Column(name = "is_active")

@@ -33,6 +33,9 @@ public class Box {
     @Column(name = "work_coefficient")
     private Float workCoefficient;
 
+    @Column(name = "is_active")
+    private boolean isActive;
+
     @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "operator_id")
     private User operator;

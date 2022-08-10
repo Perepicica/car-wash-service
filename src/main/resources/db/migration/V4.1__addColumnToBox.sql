@@ -1,0 +1,1 @@
+ALTER TABLE box ADD is_active BOOLEAN;

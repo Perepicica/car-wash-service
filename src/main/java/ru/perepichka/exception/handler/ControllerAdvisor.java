@@ -32,7 +32,8 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
             InvalidCoefficientException.class,
             InvalidAppointmentStatusException.class,
             UpdateAppointmentException.class,
-            OperatorAssigningException.class
+            OperatorAssigningException.class,
+            DeleteBoxException.class
     })
     public ResponseEntity<Object> handleBadArgumentException(RuntimeException exc, WebRequest request) {
         return new ResponseEntity<>(getBody(exc), HttpStatus.BAD_REQUEST);

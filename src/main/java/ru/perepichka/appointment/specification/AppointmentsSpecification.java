@@ -28,6 +28,18 @@ public class AppointmentsSpecification {
         };
     }
 
+    public static Specification<Appointment> getUndoneAppointmentsForBox(String boxId) {
+        return (root, query, cb) -> {
+            Join<Appointment, Box> joinTable = root.join(Appointment_.box);
+            return cb.and(
+                    filterByBox(cb, joinTable, boxId),
+                    filterByBookedStatus(cb,root),
+                    filterByConfirmedStatus(cb,root)
+            );
+        };
+    }
+
+
     private static Predicate filterByBox(CriteriaBuilder cb, Join<Appointment, Box> join, String boxId) {
         if (boxId == null) return cb.and();
         return cb.equal(join.get(Box_.ID), boxId);
@@ -43,6 +55,14 @@ public class AppointmentsSpecification {
         return cb.between(cb.literal(time),
                 root.get(Appointment_.STARTS_AT),
                 root.get(Appointment_.ENDS_AT));
+    }
+
+    private static Predicate filterByBookedStatus(CriteriaBuilder cb, Root<Appointment> root) {
+        return cb.equal(root.get(Appointment_.STATUS), Appointment.Status.BOOKED);
+    }
+
+    private static Predicate filterByConfirmedStatus(CriteriaBuilder cb, Root<Appointment> root) {
+        return cb.equal(root.get(Appointment_.STATUS), Appointment.Status.CONFIRMED);
     }
 
 }

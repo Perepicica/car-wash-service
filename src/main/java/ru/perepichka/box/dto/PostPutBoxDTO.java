@@ -37,6 +37,7 @@ public class PostPutBoxDTO {
         User operator = new User();
         operator.setId(operatorId);
         box.setOperator(operator);
+        box.setActive(true);
         return box;
     }
 
