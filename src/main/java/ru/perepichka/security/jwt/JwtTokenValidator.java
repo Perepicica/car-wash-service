@@ -2,6 +2,7 @@ package ru.perepichka.security.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,11 +19,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class JwtTokenValidator {
     @Value("${secret-key}")
     private String secretKey;
 
-    UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
     public static final String BEARER_PARAMETER = "Bearer ";
 
 

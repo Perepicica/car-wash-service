@@ -34,7 +34,7 @@ public class UserController {
         return userServiceImpl.getUser(id);
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('CUSTOMER') and #id==authentication.principal.getId)")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}/appointments")
     public List<GetAppointmentForUserDto> getUserAppointments(@PathVariable(name = "id") String id,
@@ -50,7 +50,7 @@ public class UserController {
         return userServiceImpl.updateUserRole(id, statusDTO.getAsUserRole());
     }
 
-    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("hasRole('CUSTOMER') and #id==authentication.principal.getId")
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable(name = "id") String id) {
