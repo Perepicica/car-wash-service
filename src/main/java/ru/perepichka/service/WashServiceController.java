@@ -32,7 +32,7 @@ public class WashServiceController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
-    public GetServiceDTO updateService(@PathVariable(name = "id") String id,
+    public GetServiceDTO updateServiceDiscount(@PathVariable(name = "id") String id,
                                        @RequestBody @Valid DiscountUpdateServiceDTO discountDTO) {
         return serviceServiceImpl.updateService(id, discountDTO.getDiscount());
     }
