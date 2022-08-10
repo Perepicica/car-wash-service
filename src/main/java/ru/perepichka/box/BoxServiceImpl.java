@@ -27,12 +27,14 @@ import java.util.Optional;
 @Service
 public class BoxServiceImpl implements BoxService {
 
-    private static final String INVALID_ID_EXC = "Box not found, id: ";
-    private static final String INVALID_OPERATOR_ID_EXC = "Operator not found, id: ";
+    private static final String INVALID_ID_EXC = "Box not found";
+    private static final String INVALID_OPERATOR_ID_EXC = "Operator not found";
+    private static final String OPERATOR_HAS_ALREADY_BOX_EXC = "This operator is already assigned to box ";
+    private static final String USER_IS_NOT_OPERATOR_EXC = "This user isn't an operator";
+    private static final String BOX_HAS_APPOINTMENTS_EXC = "This box has booked ar confirmed appointments";
 
     private final BoxRepository boxRepository;
     private final UserRepository userRepository;
-
     private final AppointmentRepository appointmentRepository;
 
     @Override
@@ -67,7 +69,7 @@ public class BoxServiceImpl implements BoxService {
             box.setWorkCoefficient(newBox.getWorkCoefficient());
             box.setOperator(getAndCheckOperator(newBox.getOperator().getId()));
             return boxRepository.save(box).getAsGetBoxDto();
-        }).orElseThrow(() -> new IdNotFoundException(INVALID_ID_EXC + id));
+        }).orElseThrow(() -> new IdNotFoundException(INVALID_ID_EXC));
     }
 
     @Override
@@ -88,7 +90,7 @@ public class BoxServiceImpl implements BoxService {
         if (box.isPresent()) {
             return box.get();
         }
-        throw new IdNotFoundException(INVALID_ID_EXC + id);
+        throw new IdNotFoundException(INVALID_ID_EXC);
     }
 
     @Override
@@ -104,16 +106,16 @@ public class BoxServiceImpl implements BoxService {
         Optional<User> operator = userRepository.findById(id);
 
         if (operator.isEmpty()) {
-            throw new IdNotFoundException(INVALID_OPERATOR_ID_EXC + id);
+            throw new IdNotFoundException(INVALID_OPERATOR_ID_EXC);
         }
 
         if (operator.get().getRole() != User.Role.OPERATOR) {
-            throw new OperatorAssigningException("This user isn't an operator");
+            throw new OperatorAssigningException(USER_IS_NOT_OPERATOR_EXC);
         }
 
         if (operator.get().getBox() != null) {
             throw new OperatorAssigningException(
-                    "This operator is already assigned to box " + operator.get().getBox().getName()
+                    OPERATOR_HAS_ALREADY_BOX_EXC + operator.get().getBox().getName()
             );
         }
 
@@ -124,7 +126,7 @@ public class BoxServiceImpl implements BoxService {
         List<Appointment> appointments =
                 appointmentRepository.findAll(AppointmentsSpecification.getUndoneAppointmentsForBox(id));
         if (!appointments.isEmpty()) {
-            throw new DeleteBoxException("This box has booked ar confirmed appointments");
+            throw new DeleteBoxException(BOX_HAS_APPOINTMENTS_EXC);
         }
     }
 }

@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final String INVALID_ID_EXC = "User not found, id: ";
+    private static final String USER_NOT_FOUND_EXC = "User not found";
 
     private final UserRepository userRepository;
 
@@ -42,13 +42,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public GetUserDto getUser(String id) {
         Optional<User> user = userRepository.findById(id);
-        return checkIfUserExists(user, id).getAsGetUserDto();
+        return checkIfUserExists(user).getAsGetUserDto();
     }
 
     @Override
     public List<GetAppointmentForUserDto> getUserAppointments(String id, boolean active) {
         Optional<User> optionalUser = userRepository.findById(id);
-        User user = checkIfUserExists(optionalUser, id);
+        User user = checkIfUserExists(optionalUser);
 
         Stream<Appointment> appStream = user.getAppointments().stream();
 
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
                     dbUser.setRole(newRole);
                     return userRepository.save(dbUser).getAsGetUserDto();
                 })
-                .orElseThrow(() -> new IdNotFoundException(INVALID_ID_EXC + id));
+                .orElseThrow(() -> new IdNotFoundException(USER_NOT_FOUND_EXC));
     }
 
     @Override
@@ -93,15 +93,15 @@ public class UserServiceImpl implements UserService {
             user.setActive(false);
             userRepository.save(user);
         } else {
-            throw new IdNotFoundException(INVALID_ID_EXC + id);
+            throw new IdNotFoundException(USER_NOT_FOUND_EXC);
         }
     }
 
-    public User checkIfUserExists(Optional<User> user, String id) {
+    public User checkIfUserExists(Optional<User> user) {
         if (user.isPresent()) {
             return user.get();
         } else {
-            throw new IdNotFoundException(INVALID_ID_EXC + id);
+            throw new IdNotFoundException(USER_NOT_FOUND_EXC);
         }
     }
 }

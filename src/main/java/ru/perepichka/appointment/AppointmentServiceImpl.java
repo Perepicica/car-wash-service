@@ -28,6 +28,10 @@ import java.util.Optional;
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
 
+    private static final String APPOINTMENT_NOT_FOUND_EXC = "Appointment not found";
+    private static final String USER_NOT_FOUND_EXC = "User not found";
+    private static final String SERVICE_NOT_FOUND_EXC = "Service not found";
+
     private final AppointmentRepository appointmentRepository;
     private final WashServiceRepository washServiceRepository;
     private final UserRepository userRepository;
@@ -35,7 +39,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public Page<GetAppointmentDto> getAppointments(AppointmentFilters filters, Pageable pageable) {
-
         return appointmentRepository.findAll(
                         AppointmentsSpecification.getFilteredAppointments(filters),
                         pageable)
@@ -74,7 +77,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                         return appointmentRepository.save(updateDateTimeService(appointment, data)).getAsGetAppointmentDto();
                     }
                 })
-                .orElseThrow(() -> new IdNotFoundException("Appointment not found, id: " + id));
+                .orElseThrow(() -> new IdNotFoundException(APPOINTMENT_NOT_FOUND_EXC));
     }
 
     @Override
@@ -85,7 +88,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     private WashService getService(String serviceId) {
         Optional<WashService> service = washServiceRepository.findById(serviceId);
         if (service.isEmpty()) {
-            throw new IdNotFoundException("Service not found, id: " + serviceId);
+            throw new IdNotFoundException(SERVICE_NOT_FOUND_EXC);
         }
         return service.get();
     }
@@ -118,7 +121,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     private User getCustomer(String id) {
         Optional<User> customer = userRepository.findById(id);
         if (customer.isEmpty()) {
-            throw new IdNotFoundException("User not found, id: " + id);
+            throw new IdNotFoundException(USER_NOT_FOUND_EXC);
         }
         return customer.get();
     }

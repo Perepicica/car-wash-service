@@ -14,6 +14,8 @@ import ru.perepichka.service.dto.GetServiceDto;
 @Service
 public class WashServiceServiceImpl implements WashServiceService {
 
+    private static final String SERVICE_NOT_FOUND_EXC = "Service not found";
+
     private final WashServiceRepository washServiceRepository;
 
     @Override
@@ -38,6 +40,6 @@ public class WashServiceServiceImpl implements WashServiceService {
         return washServiceRepository.findById(id).map(service -> {
             service.setDiscount(newDiscount);
             return washServiceRepository.save(service).getAsGetServiceDto();
-        }).orElseThrow(() -> new IdNotFoundException("Service not found, id: " + id));
+        }).orElseThrow(() -> new IdNotFoundException(SERVICE_NOT_FOUND_EXC));
     }
 }
