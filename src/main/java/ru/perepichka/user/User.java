@@ -12,7 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 import ru.perepichka.appointment.Appointment;
 import ru.perepichka.box.Box;
 import ru.perepichka.user.dto.GetUserDto;
-import ru.perepichka.user.dto.UserFullDto;
+import ru.perepichka.user.dto.SecurityUser;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -65,13 +65,14 @@ public class User {
         return dto;
     }
 
-    public UserFullDto getAsUserFullDto(){
-        UserFullDto dto = new UserFullDto();
+    public SecurityUser getAsSecurityUser(){
+        SecurityUser dto = new SecurityUser();
         dto.setId(id);
         dto.setName(name);
         dto.setEmail(email);
         dto.setPassword(password);
         dto.setRole(role);
+        dto.setActive(isActive);
         return dto;
     }
 

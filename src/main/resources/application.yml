@@ -13,3 +13,8 @@ spring:
         default_schema: service_schema
   flyway:
     default-schema: service_schema
+
+secret-key: thisISTheBestCarWashServiceButNoOneWillKnowIt
+encode-strength: 10
+access-token-expiration-days: 2
+refresh-token-expiration-weeks: 5

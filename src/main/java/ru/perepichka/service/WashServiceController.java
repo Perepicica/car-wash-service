@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.perepichka.service.dto.DiscountUpdateServiceDto;
 import ru.perepichka.service.dto.GetServiceDto;
@@ -18,18 +19,21 @@ public class WashServiceController {
 
     private final WashServiceServiceImpl serviceServiceImpl;
 
+    @PreAuthorize("isAuthenticated()")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public Page<GetServiceDto> getAllServices(Pageable pageable) {
         return serviceServiceImpl.gelAllServices(pageable);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public GetServiceDto createService(@RequestBody @Valid PostServiceDto serviceDTO) {
         return serviceServiceImpl.createService(serviceDTO.getAsService());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
     public GetServiceDto updateServiceDiscount(@PathVariable(name = "id") String id,

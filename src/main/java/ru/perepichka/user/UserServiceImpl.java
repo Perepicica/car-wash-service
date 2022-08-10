@@ -3,6 +3,7 @@ package ru.perepichka.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.perepichka.appointment.Appointment;
@@ -11,7 +12,7 @@ import ru.perepichka.exception.EmailAlreadyExistsException;
 import ru.perepichka.exception.IdNotFoundException;
 import ru.perepichka.exception.UserNotFoundException;
 import ru.perepichka.user.dto.GetUserDto;
-import ru.perepichka.user.dto.UserFullDto;
+import ru.perepichka.user.dto.SecurityUser;
 import ru.perepichka.user.specification.UserFilters;
 import ru.perepichka.user.specification.UserSpecification;
 
@@ -27,15 +28,13 @@ public class UserServiceImpl implements UserService {
     private static final String USER_NOT_FOUND_EXC = "User not found";
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserFullDto findByEmail(String email) {
+    public SecurityUser findByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
-        if (!user.isActive()) {
-            throw new UserNotFoundException();
-        }
-        return user.getAsUserFullDto();
+        return user.getAsSecurityUser();
     }
 
     @Override
@@ -74,7 +73,7 @@ public class UserServiceImpl implements UserService {
     public GetUserDto createUser(User user) {
         UserFilters filters = UserFilters.builder().email(user.getEmail()).isActive(true).build();
         List<User> usersWithSameEmail = userRepository.findAll(UserSpecification.getFilteredUsers(filters));
-
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         if (usersWithSameEmail.isEmpty()) {
             return userRepository.save(user).getAsGetUserDto();
         }

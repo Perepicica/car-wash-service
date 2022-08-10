@@ -6,10 +6,11 @@ import ru.perepichka.user.Role;
 
 @Getter
 @Setter
-public class UserFullDto {
+public class SecurityUser {
     private String id;
     private String name;
     private String email;
     private String password;
     private Role role;
+    private boolean isActive;
 }

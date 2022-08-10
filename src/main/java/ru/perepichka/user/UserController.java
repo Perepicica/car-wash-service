@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.perepichka.appointment.dto.GetAppointmentForUserDto;
 import ru.perepichka.user.dto.GetUserDto;
-import ru.perepichka.user.dto.PostUserDto;
 import ru.perepichka.user.dto.RoleUpdateUserDto;
 
 import javax.validation.Valid;
@@ -20,18 +20,21 @@ public class UserController {
 
     private final UserServiceImpl userServiceImpl;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public Page<GetUserDto> getAllUsers(Pageable pageable) {
         return userServiceImpl.getUsers(pageable);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public GetUserDto getUserById(@PathVariable(name = "id") String id) {
         return userServiceImpl.getUser(id);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}/appointments")
     public List<GetAppointmentForUserDto> getUserAppointments(@PathVariable(name = "id") String id,
@@ -39,12 +42,7 @@ public class UserController {
         return userServiceImpl.getUserAppointments(id, active);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    public GetUserDto createUser(@RequestBody @Valid PostUserDto userDTO) {
-        return userServiceImpl.createUser(userDTO.getAsUser());
-    }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
     public GetUserDto updateUserRole(@PathVariable(name = "id") String id,
@@ -52,6 +50,7 @@ public class UserController {
         return userServiceImpl.updateUserRole(id, statusDTO.getAsUserRole());
     }
 
+    @PreAuthorize("hasRole('CUSTOMER')")
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable(name = "id") String id) {
