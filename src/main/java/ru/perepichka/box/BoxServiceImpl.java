@@ -12,8 +12,7 @@ import ru.perepichka.box.dto.GetBoxDto;
 import ru.perepichka.box.specification.BoxSpecification;
 import ru.perepichka.exception.DeleteBoxException;
 import ru.perepichka.exception.IdNotFoundException;
-import ru.perepichka.exception.NoDataInDatabaseException;
-import ru.perepichka.exception.OperatorAssigningException;
+import ru.perepichka.exception.OperatorToBoxAssigningException;
 import ru.perepichka.user.User;
 import ru.perepichka.user.UserRepository;
 
@@ -39,14 +38,9 @@ public class BoxServiceImpl implements BoxService {
 
     @Override
     public Page<GetBoxDto> getAllBoxes(Pageable pageable) {
-        Page<GetBoxDto> boxes = boxRepository
-                .findAll(BoxSpecification.getActiveBoxes(),pageable)
+        return boxRepository
+                .findAll(BoxSpecification.getActiveBoxes(), pageable)
                 .map(Box::getAsGetBoxDto);
-
-        if (boxes.isEmpty()) {
-            throw new NoDataInDatabaseException();
-        }
-        return boxes;
     }
 
     @Override
@@ -110,11 +104,11 @@ public class BoxServiceImpl implements BoxService {
         }
 
         if (operator.get().getRole() != User.Role.OPERATOR) {
-            throw new OperatorAssigningException(USER_IS_NOT_OPERATOR_EXC);
+            throw new OperatorToBoxAssigningException(USER_IS_NOT_OPERATOR_EXC);
         }
 
         if (operator.get().getBox() != null) {
-            throw new OperatorAssigningException(
+            throw new OperatorToBoxAssigningException(
                     OPERATOR_HAS_ALREADY_BOX_EXC + operator.get().getBox().getName()
             );
         }

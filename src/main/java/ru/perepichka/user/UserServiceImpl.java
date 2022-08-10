@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.perepichka.appointment.Appointment;
 import ru.perepichka.appointment.dto.GetAppointmentForUserDto;
 import ru.perepichka.exception.EmailAlreadyExistsException;
-import ru.perepichka.exception.NoDataInDatabaseException;
 import ru.perepichka.exception.IdNotFoundException;
 import ru.perepichka.user.dto.GetUserDto;
 import ru.perepichka.user.specification.UserFilters;
@@ -29,14 +28,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<GetUserDto> getUsers(Pageable pageable) {
-        Page<GetUserDto> users = userRepository
+        return userRepository
                 .findAll(UserSpecification.getFilteredUsers(new UserFilters()), pageable)
                 .map(User::getAsGetUserDto);
-
-        if (users.isEmpty()) {
-            throw new NoDataInDatabaseException();
-        }
-        return users;
     }
 
     @Override

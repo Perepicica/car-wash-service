@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.perepichka.exception.IdNotFoundException;
-import ru.perepichka.exception.NoDataInDatabaseException;
 import ru.perepichka.service.dto.GetServiceDto;
 
 @RequiredArgsConstructor
@@ -20,14 +19,9 @@ public class WashServiceServiceImpl implements WashServiceService {
 
     @Override
     public Page<GetServiceDto> gelAllServices(Pageable pageable) {
-        Page<GetServiceDto> services = washServiceRepository
+        return washServiceRepository
                 .findAll(pageable)
                 .map(WashService::getAsGetServiceDto);
-
-        if (services.isEmpty()) {
-            throw new NoDataInDatabaseException();
-        }
-        return services;
     }
 
     @Override

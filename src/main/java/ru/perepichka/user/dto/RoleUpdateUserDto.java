@@ -3,7 +3,7 @@ package ru.perepichka.user.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import ru.perepichka.exception.InvalidRoleTypeException;
+import ru.perepichka.exception.InvalidUserRoleException;
 import ru.perepichka.user.User;
 
 import javax.validation.constraints.NotEmpty;
@@ -19,6 +19,6 @@ public class RoleUpdateUserDto {
         for (User.Role rol : User.Role.values()) {
             if (rol.name().equals(role.toUpperCase())) return rol;
         }
-        throw new InvalidRoleTypeException(role);
+        throw new InvalidUserRoleException(role);
     }
 }

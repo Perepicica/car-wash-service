@@ -4,12 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import ru.perepichka.box.Box;
-import ru.perepichka.exception.InvalidCoefficientException;
 import ru.perepichka.user.User;
 import ru.perepichka.util.DateTimeParserUtil;
 
 import javax.validation.constraints.NotEmpty;
-
+import javax.validation.constraints.Positive;
 
 @Getter
 @Setter
@@ -20,8 +19,8 @@ public class PostPutBoxDto {
     private String opensAt;
     @NotEmpty
     private String closesAt;
-    @NotEmpty
-    private String workCoefficient;
+    @Positive
+    private float workCoefficient;
     @NotEmpty
     private String operatorId;
 
@@ -31,7 +30,7 @@ public class PostPutBoxDto {
         box.setName(name);
         box.setOpensAt(DateTimeParserUtil.getLocalTime(opensAt));
         box.setClosesAt(DateTimeParserUtil.getLocalTime(closesAt));
-        box.setWorkCoefficient(getCoefficient());
+        box.setWorkCoefficient(workCoefficient);
         User operator = new User();
         operator.setId(operatorId);
         box.setOperator(operator);
@@ -39,13 +38,4 @@ public class PostPutBoxDto {
         return box;
     }
 
-    @JsonIgnore
-    private Float getCoefficient(){
-        try {
-            return Float.parseFloat(workCoefficient);
-        } catch (Exception e){
-            e.printStackTrace();
-            throw new InvalidCoefficientException();
-        }
-    }
 }
