@@ -8,7 +8,7 @@ import java.time.LocalTime;
 
 @Getter
 @Setter
-public class GetAppointmentForUserDTO {
+public class GetAppointmentForUserDto {
     private String id;
     private LocalDate date;
     private LocalTime startsAt;

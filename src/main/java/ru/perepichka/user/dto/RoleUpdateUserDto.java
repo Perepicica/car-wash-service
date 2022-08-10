@@ -10,7 +10,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
-public class RoleUpdateUserDTO {
+public class RoleUpdateUserDto {
     @NotEmpty
     String role;
 

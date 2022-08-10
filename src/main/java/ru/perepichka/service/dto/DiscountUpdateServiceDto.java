@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.Range;
 
 @Getter
 @Setter
-public class DiscountUpdateServiceDTO {
+public class DiscountUpdateServiceDto {
 
     @Range(min = 0, max = 100)
     private Integer discount;

@@ -11,7 +11,7 @@ import javax.validation.constraints.Positive;
 
 @Getter
 @Setter
-public class PostServiceDTO {
+public class PostServiceDto {
     @NotEmpty
     String name;
     @Positive

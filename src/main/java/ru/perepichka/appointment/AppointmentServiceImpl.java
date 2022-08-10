@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.perepichka.appointment.dto.DataForBooking;
-import ru.perepichka.appointment.dto.GetAppointmentDTO;
+import ru.perepichka.appointment.dto.GetAppointmentDto;
 import ru.perepichka.appointment.dto.LocalDatePeriod;
 import ru.perepichka.appointment.specification.AppointmentFilters;
 import ru.perepichka.appointment.specification.AppointmentsSpecification;
@@ -34,16 +34,16 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final BoxServiceImpl boxServiceImpl;
 
     @Override
-    public Page<GetAppointmentDTO> getAppointments(AppointmentFilters filters,Pageable pageable) {
+    public Page<GetAppointmentDto> getAppointments(AppointmentFilters filters, Pageable pageable) {
 
         return appointmentRepository.findAll(
                         AppointmentsSpecification.getFilteredAppointments(filters),
                         pageable)
-                .map(Appointment::getAsGetAppointmentDTO);
+                .map(Appointment::getAsGetAppointmentDto);
     }
 
     @Override
-    public GetAppointmentDTO createAppointment(DataForBooking data) {
+    public GetAppointmentDto createAppointment(DataForBooking data) {
         WashService service = getService(data.getServiceId());
         Box box = getBox(data, service);
 
@@ -51,7 +51,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         updateAppointmentData(appointment, data, box, service);
         appointment.setCustomer(getCustomer(data.getCustomerId()));
 
-        return appointmentRepository.save(appointment).getAsGetAppointmentDTO();
+        return appointmentRepository.save(appointment).getAsGetAppointmentDto();
     }
 
     private Appointment updateAppointmentData(Appointment appointment, DataForBooking data, Box box, WashService service) {
@@ -65,13 +65,13 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public GetAppointmentDTO updateAppointment(String id, DataForBooking data) {
+    public GetAppointmentDto updateAppointment(String id, DataForBooking data) {
         return appointmentRepository.findById(id)
                 .map(appointment -> {
                     if (appointment.getStatus() != data.getStatus()) {
-                        return appointmentRepository.save(updateStatus(appointment, data)).getAsGetAppointmentDTO();
+                        return appointmentRepository.save(updateStatus(appointment, data)).getAsGetAppointmentDto();
                     } else {
-                        return appointmentRepository.save(updateDateTimeService(appointment, data)).getAsGetAppointmentDTO();
+                        return appointmentRepository.save(updateDateTimeService(appointment, data)).getAsGetAppointmentDto();
                     }
                 })
                 .orElseThrow(() -> new IdNotFoundException("Appointment not found, id: " + id));

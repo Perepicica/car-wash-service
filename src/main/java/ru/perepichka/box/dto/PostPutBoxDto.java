@@ -13,7 +13,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
-public class PostPutBoxDTO {
+public class PostPutBoxDto {
     @NotEmpty
     private String name;
     @NotEmpty

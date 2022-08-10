@@ -9,7 +9,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
-public class PostAppointmentDTO {
+public class PostAppointmentDto {
     @NotEmpty
     private String customerId;
     @NotEmpty

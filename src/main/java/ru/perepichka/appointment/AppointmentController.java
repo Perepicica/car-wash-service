@@ -18,26 +18,26 @@ public class AppointmentController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public Page<GetAppointmentDTO> getAppointment(@RequestBody @Valid AppointmentFiltersDTO dto,
+    public Page<GetAppointmentDto> getAppointment(@RequestBody @Valid AppointmentFiltersDto dto,
                                                   Pageable pageable) {
         return appointmentServiceImpl.getAppointments(dto.getAsAppointmentFilters(), pageable);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public GetAppointmentDTO createAppointment(@RequestBody @Valid PostAppointmentDTO dto) {
+    public GetAppointmentDto createAppointment(@RequestBody @Valid PostAppointmentDto dto) {
         return appointmentServiceImpl.createAppointment(dto.getAsDataForBooking());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
-    public GetAppointmentDTO updateAppointment(@PathVariable(name = "id") String id, @RequestBody @Valid PutAppointmentDTO dto) {
+    public GetAppointmentDto updateAppointment(@PathVariable(name = "id") String id, @RequestBody @Valid PutAppointmentDto dto) {
         return appointmentServiceImpl.updateAppointment(id, dto.getAsDataForBooking());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/revenue")
-    public float getRevenue(@RequestBody @Valid PeriodDTO dto) {
+    public float getRevenue(@RequestBody @Valid PeriodDto dto) {
         return appointmentServiceImpl.getRevenue(dto.getAsLocalDatePeriod());
     }
 

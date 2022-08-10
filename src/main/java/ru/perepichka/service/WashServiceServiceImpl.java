@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.perepichka.exception.IdNotFoundException;
 import ru.perepichka.exception.NoDataInDatabaseException;
-import ru.perepichka.service.dto.GetServiceDTO;
+import ru.perepichka.service.dto.GetServiceDto;
 
 @RequiredArgsConstructor
 @Transactional
@@ -17,10 +17,10 @@ public class WashServiceServiceImpl implements WashServiceService {
     private final WashServiceRepository washServiceRepository;
 
     @Override
-    public Page<GetServiceDTO> gelAllServices(Pageable pageable) {
-        Page<GetServiceDTO> services = washServiceRepository
+    public Page<GetServiceDto> gelAllServices(Pageable pageable) {
+        Page<GetServiceDto> services = washServiceRepository
                 .findAll(pageable)
-                .map(WashService::getAsGetServiceDTO);
+                .map(WashService::getAsGetServiceDto);
 
         if (services.isEmpty()) {
             throw new NoDataInDatabaseException();
@@ -29,15 +29,15 @@ public class WashServiceServiceImpl implements WashServiceService {
     }
 
     @Override
-    public GetServiceDTO createService(WashService service) {
-        return washServiceRepository.save(service).getAsGetServiceDTO();
+    public GetServiceDto createService(WashService service) {
+        return washServiceRepository.save(service).getAsGetServiceDto();
     }
 
     @Override
-    public GetServiceDTO updateService(String id, Integer newDiscount) {
+    public GetServiceDto updateService(String id, Integer newDiscount) {
         return washServiceRepository.findById(id).map(service -> {
             service.setDiscount(newDiscount);
-            return washServiceRepository.save(service).getAsGetServiceDTO();
+            return washServiceRepository.save(service).getAsGetServiceDto();
         }).orElseThrow(() -> new IdNotFoundException("Service not found, id: " + id));
     }
 }

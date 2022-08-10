@@ -7,7 +7,7 @@ import ru.perepichka.util.DateTimeParserUtil;
 
 @Getter
 @Setter
-public class PeriodDTO {
+public class PeriodDto {
 
     String from;
     String till;

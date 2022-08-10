@@ -3,19 +3,19 @@ package ru.perepichka.box;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ru.perepichka.appointment.dto.DataForBooking;
-import ru.perepichka.box.dto.GetBoxDTO;
+import ru.perepichka.box.dto.GetBoxDto;
 
 import java.util.List;
 
 public interface BoxService {
 
-    Page<GetBoxDTO> getAllBoxes(Pageable pageable);
+    Page<GetBoxDto> getAllBoxes(Pageable pageable);
 
-    GetBoxDTO getBox(String id);
+    GetBoxDto getBox(String id);
 
-    GetBoxDTO createBox(Box box);
+    GetBoxDto createBox(Box box);
 
-    GetBoxDTO updateBox(String id, Box newBox);
+    GetBoxDto updateBox(String id, Box newBox);
 
     void deleteBox(String id);
 

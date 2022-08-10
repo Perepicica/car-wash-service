@@ -3,7 +3,7 @@ package ru.perepichka.box;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import ru.perepichka.box.dto.GetBoxDTO;
+import ru.perepichka.box.dto.GetBoxDto;
 import ru.perepichka.user.User;
 
 import javax.persistence.*;
@@ -42,14 +42,14 @@ public class Box {
 
     private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 
-    public GetBoxDTO getAsGetBoxDTO() {
-        GetBoxDTO dto = new GetBoxDTO();
+    public GetBoxDto getAsGetBoxDto() {
+        GetBoxDto dto = new GetBoxDto();
         dto.setId(id);
         dto.setName(name);
         dto.setOpensAt(opensAt.format(dtf));
         dto.setClosesAt(closesAt.format(dtf));
         dto.setWorkCoefficient(workCoefficient.toString());
-        dto.setOperator(operator.getAsGetUserDTO());
+        dto.setOperator(operator.getAsGetUserDto());
         return dto;
     }
 }

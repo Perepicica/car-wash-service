@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GetServiceDTO {
+public class GetServiceDto {
     private String id;
     String name;
     Integer duration;

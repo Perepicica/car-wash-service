@@ -8,7 +8,7 @@ import ru.perepichka.util.DateTimeParserUtil;
 
 @Getter
 @Setter
-public class AppointmentFiltersDTO {
+public class AppointmentFiltersDto {
     private String boxId;
     private String date;
     private String time;

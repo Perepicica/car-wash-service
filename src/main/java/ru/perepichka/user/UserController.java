@@ -5,10 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.perepichka.appointment.dto.GetAppointmentForUserDTO;
-import ru.perepichka.user.dto.GetUserDTO;
-import ru.perepichka.user.dto.PostUserDTO;
-import ru.perepichka.user.dto.RoleUpdateUserDTO;
+import ru.perepichka.appointment.dto.GetAppointmentForUserDto;
+import ru.perepichka.user.dto.GetUserDto;
+import ru.perepichka.user.dto.PostUserDto;
+import ru.perepichka.user.dto.RoleUpdateUserDto;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -22,33 +22,33 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public Page<GetUserDTO> getAllUsers(Pageable pageable) {
+    public Page<GetUserDto> getAllUsers(Pageable pageable) {
         return userServiceImpl.getUsers(pageable);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public GetUserDTO getUserById(@PathVariable(name = "id") String id) {
+    public GetUserDto getUserById(@PathVariable(name = "id") String id) {
         return userServiceImpl.getUser(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}/appointments")
-    public List<GetAppointmentForUserDTO> getUserAppointments(@PathVariable(name = "id") String id,
+    public List<GetAppointmentForUserDto> getUserAppointments(@PathVariable(name = "id") String id,
                                                               @RequestParam(value = "active", required = false, defaultValue = "true") boolean active) {
         return userServiceImpl.getUserAppointments(id, active);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public GetUserDTO createUser(@RequestBody @Valid PostUserDTO userDTO) {
+    public GetUserDto createUser(@RequestBody @Valid PostUserDto userDTO) {
         return userServiceImpl.createUser(userDTO.getAsUser());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
-    public GetUserDTO updateUserRole(@PathVariable(name = "id") String id,
-                                     @RequestBody @Valid RoleUpdateUserDTO statusDTO) {
+    public GetUserDto updateUserRole(@PathVariable(name = "id") String id,
+                                     @RequestBody @Valid RoleUpdateUserDto statusDTO) {
         return userServiceImpl.updateUserRole(id, statusDTO.getAsUserRole());
     }
 

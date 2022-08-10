@@ -2,15 +2,15 @@ package ru.perepichka.box.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.perepichka.user.dto.GetUserDTO;
+import ru.perepichka.user.dto.GetUserDto;
 
 @Getter
 @Setter
-public class GetBoxDTO {
+public class GetBoxDto {
     String id;
     String name;
     String opensAt;
     String closesAt;
     String workCoefficient;
-    GetUserDTO operator;
+    GetUserDto operator;
 }

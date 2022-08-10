@@ -12,7 +12,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
-public class PutAppointmentDTO {
+public class PutAppointmentDto {
 
     @NotEmpty
     private String onDate;

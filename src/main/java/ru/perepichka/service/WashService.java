@@ -3,7 +3,7 @@ package ru.perepichka.service;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import ru.perepichka.service.dto.GetServiceDTO;
+import ru.perepichka.service.dto.GetServiceDto;
 
 import javax.persistence.*;
 
@@ -31,8 +31,8 @@ public class WashService {
     @Column(name = "discount")
     private Integer discount;
 
-    public GetServiceDTO getAsGetServiceDTO(){
-        GetServiceDTO dto = new GetServiceDTO();
+    public GetServiceDto getAsGetServiceDto(){
+        GetServiceDto dto = new GetServiceDto();
         dto.setId(id);
         dto.setName(name);
         dto.setDuration(duration);

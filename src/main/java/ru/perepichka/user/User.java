@@ -11,7 +11,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 import ru.perepichka.appointment.Appointment;
 import ru.perepichka.box.Box;
-import ru.perepichka.user.dto.GetUserDTO;
+import ru.perepichka.user.dto.GetUserDto;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -55,8 +55,8 @@ public class User {
     @JsonBackReference
     private Box box;
 
-    public GetUserDTO getAsGetUserDTO() {
-        GetUserDTO dto = new GetUserDTO();
+    public GetUserDto getAsGetUserDto() {
+        GetUserDto dto = new GetUserDto();
         dto.setId(id);
         dto.setName(name);
         dto.setEmail(email);

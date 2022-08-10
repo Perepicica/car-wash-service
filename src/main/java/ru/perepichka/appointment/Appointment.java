@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import ru.perepichka.appointment.dto.GetAppointmentDTO;
-import ru.perepichka.appointment.dto.GetAppointmentForUserDTO;
+import ru.perepichka.appointment.dto.GetAppointmentDto;
+import ru.perepichka.appointment.dto.GetAppointmentForUserDto;
 import ru.perepichka.box.Box;
 import ru.perepichka.service.WashService;
 import ru.perepichka.user.User;
@@ -57,22 +57,22 @@ public class Appointment {
     @JsonBackReference
     private WashService service;
 
-    public GetAppointmentDTO getAsGetAppointmentDTO() {
-        GetAppointmentDTO dto = new GetAppointmentDTO();
+    public GetAppointmentDto getAsGetAppointmentDto() {
+        GetAppointmentDto dto = new GetAppointmentDto();
         dto.setId(id);
         dto.setDate(date);
         dto.setStartsAt(startsAt);
         dto.setEndsAt(endsAt);
         dto.setStatus(status.name());
         dto.setCost(cost);
-        dto.setCustomer(customer.getAsGetUserDTO());
-        dto.setBox(box.getAsGetBoxDTO());
-        dto.setService(service.getAsGetServiceDTO());
+        dto.setCustomer(customer.getAsGetUserDto());
+        dto.setBox(box.getAsGetBoxDto());
+        dto.setService(service.getAsGetServiceDto());
         return dto;
     }
 
-    public GetAppointmentForUserDTO GetAsAppointmentForUserDTO(){
-        GetAppointmentForUserDTO dto = new GetAppointmentForUserDTO();
+    public GetAppointmentForUserDto getAsAppointmentForUserDto(){
+        GetAppointmentForUserDto dto = new GetAppointmentForUserDto();
         dto.setId(id);
         dto.setDate(date);
         dto.setStartsAt(startsAt);

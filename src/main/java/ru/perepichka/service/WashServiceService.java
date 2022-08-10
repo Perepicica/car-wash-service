@@ -2,12 +2,12 @@ package ru.perepichka.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import ru.perepichka.service.dto.GetServiceDTO;
+import ru.perepichka.service.dto.GetServiceDto;
 
 public interface WashServiceService {
-    Page<GetServiceDTO> gelAllServices(Pageable pageable);
+    Page<GetServiceDto> gelAllServices(Pageable pageable);
 
-    GetServiceDTO createService(WashService service);
+    GetServiceDto createService(WashService service);
 
-    GetServiceDTO updateService(String id, Integer newDiscount);
+    GetServiceDto updateService(String id, Integer newDiscount);
 }

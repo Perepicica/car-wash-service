@@ -5,9 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.perepichka.service.dto.DiscountUpdateServiceDTO;
-import ru.perepichka.service.dto.GetServiceDTO;
-import ru.perepichka.service.dto.PostServiceDTO;
+import ru.perepichka.service.dto.DiscountUpdateServiceDto;
+import ru.perepichka.service.dto.GetServiceDto;
+import ru.perepichka.service.dto.PostServiceDto;
 
 import javax.validation.Valid;
 
@@ -20,20 +20,20 @@ public class WashServiceController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public Page<GetServiceDTO> getAllServices(Pageable pageable) {
+    public Page<GetServiceDto> getAllServices(Pageable pageable) {
         return serviceServiceImpl.gelAllServices(pageable);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public GetServiceDTO createService(@RequestBody @Valid PostServiceDTO serviceDTO) {
+    public GetServiceDto createService(@RequestBody @Valid PostServiceDto serviceDTO) {
         return serviceServiceImpl.createService(serviceDTO.getAsService());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
-    public GetServiceDTO updateServiceDiscount(@PathVariable(name = "id") String id,
-                                       @RequestBody @Valid DiscountUpdateServiceDTO discountDTO) {
+    public GetServiceDto updateServiceDiscount(@PathVariable(name = "id") String id,
+                                               @RequestBody @Valid DiscountUpdateServiceDto discountDTO) {
         return serviceServiceImpl.updateService(id, discountDTO.getDiscount());
     }
 

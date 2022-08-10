@@ -8,7 +8,7 @@ import ru.perepichka.appointment.Appointment;
 import ru.perepichka.appointment.AppointmentRepository;
 import ru.perepichka.appointment.dto.DataForBooking;
 import ru.perepichka.appointment.specification.AppointmentsSpecification;
-import ru.perepichka.box.dto.GetBoxDTO;
+import ru.perepichka.box.dto.GetBoxDto;
 import ru.perepichka.box.specification.BoxSpecification;
 import ru.perepichka.exception.DeleteBoxException;
 import ru.perepichka.exception.IdNotFoundException;
@@ -36,10 +36,10 @@ public class BoxServiceImpl implements BoxService {
     private final AppointmentRepository appointmentRepository;
 
     @Override
-    public Page<GetBoxDTO> getAllBoxes(Pageable pageable) {
-        Page<GetBoxDTO> boxes = boxRepository
+    public Page<GetBoxDto> getAllBoxes(Pageable pageable) {
+        Page<GetBoxDto> boxes = boxRepository
                 .findAll(BoxSpecification.getActiveBoxes(),pageable)
-                .map(Box::getAsGetBoxDTO);
+                .map(Box::getAsGetBoxDto);
 
         if (boxes.isEmpty()) {
             throw new NoDataInDatabaseException();
@@ -48,25 +48,25 @@ public class BoxServiceImpl implements BoxService {
     }
 
     @Override
-    public GetBoxDTO getBox(String id) {
-        return getAndCheckBox(id).getAsGetBoxDTO();
+    public GetBoxDto getBox(String id) {
+        return getAndCheckBox(id).getAsGetBoxDto();
     }
 
     @Override
-    public GetBoxDTO createBox(Box box) {
+    public GetBoxDto createBox(Box box) {
         box.setOperator(getAndCheckOperator(box.getOperator().getId()));
-        return boxRepository.save(box).getAsGetBoxDTO();
+        return boxRepository.save(box).getAsGetBoxDto();
     }
 
     @Override
-    public GetBoxDTO updateBox(String id, Box newBox) {
+    public GetBoxDto updateBox(String id, Box newBox) {
         return boxRepository.findById(id).map(box -> {
             box.setName(newBox.getName());
             box.setOpensAt(newBox.getOpensAt());
             box.setClosesAt(newBox.getClosesAt());
             box.setWorkCoefficient(newBox.getWorkCoefficient());
             box.setOperator(getAndCheckOperator(newBox.getOperator().getId()));
-            return boxRepository.save(box).getAsGetBoxDTO();
+            return boxRepository.save(box).getAsGetBoxDto();
         }).orElseThrow(() -> new IdNotFoundException(INVALID_ID_EXC + id));
     }
 
