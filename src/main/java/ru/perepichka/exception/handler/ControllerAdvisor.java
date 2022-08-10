@@ -14,11 +14,6 @@ import java.util.Map;
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(NoOptionsForBookingException.class)
-    public ResponseEntity<Object> handleNoOptionsForBooking(NoOptionsForBookingException exc) {
-        return new ResponseEntity<>(getBody(exc), HttpStatus.NOT_FOUND);
-    }
-
     @ExceptionHandler({
             IdNotFoundException.class,
             EmailAlreadyExistsException.class,
