@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import ru.perepichka.exception.InvalidUserRoleException;
-import ru.perepichka.user.User;
+import ru.perepichka.user.Role;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -15,8 +15,8 @@ public class RoleUpdateUserDto {
     private String role;
 
     @JsonIgnore
-    public User.Role getAsUserRole() {
-        for (User.Role rol : User.Role.values()) {
+    public Role getAsUserRole() {
+        for (Role rol : Role.values()) {
             if (rol.name().equals(role.toUpperCase())) return rol;
         }
         throw new InvalidUserRoleException(role);

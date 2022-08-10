@@ -1,6 +1,7 @@
 package ru.perepichka.user.specification;
 
 import org.springframework.data.jpa.domain.Specification;
+import ru.perepichka.user.Role;
 import ru.perepichka.user.User;
 import ru.perepichka.user.User_;
 
@@ -29,7 +30,7 @@ public class UserSpecification {
         return cb.equal(root.get(User_.EMAIL), email);
     }
 
-    private static Predicate filterByRole(CriteriaBuilder cb, Root<User> root, User.Role role) {
+    private static Predicate filterByRole(CriteriaBuilder cb, Root<User> root, Role role) {
         if (role == null) return cb.and();
         return cb.equal(root.get(User_.ROLE), role);
     }

@@ -1,7 +1,7 @@
 package ru.perepichka.user.specification;
 
 import lombok.*;
-import ru.perepichka.user.User;
+import ru.perepichka.user.Role;
 
 @Getter
 @Setter
@@ -11,5 +11,5 @@ import ru.perepichka.user.User;
 public class UserFilters {
     private boolean isActive = true;
     private String email;
-    private User.Role role;
+    private Role role;
 }

@@ -13,6 +13,7 @@ import ru.perepichka.box.specification.BoxSpecification;
 import ru.perepichka.exception.DeleteBoxException;
 import ru.perepichka.exception.IdNotFoundException;
 import ru.perepichka.exception.OperatorToBoxAssigningException;
+import ru.perepichka.user.Role;
 import ru.perepichka.user.User;
 import ru.perepichka.user.UserRepository;
 
@@ -103,7 +104,7 @@ public class BoxServiceImpl implements BoxService {
             throw new IdNotFoundException(INVALID_OPERATOR_ID_EXC);
         }
 
-        if (operator.get().getRole() != User.Role.OPERATOR) {
+        if (operator.get().getRole() != Role.OPERATOR) {
             throw new OperatorToBoxAssigningException(USER_IS_NOT_OPERATOR_EXC);
         }
 

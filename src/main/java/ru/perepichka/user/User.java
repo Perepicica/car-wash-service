@@ -12,6 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 import ru.perepichka.appointment.Appointment;
 import ru.perepichka.box.Box;
 import ru.perepichka.user.dto.GetUserDto;
+import ru.perepichka.user.dto.UserFullDto;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -60,12 +61,18 @@ public class User {
         dto.setId(id);
         dto.setName(name);
         dto.setEmail(email);
-        dto.setRole(role.name());
+        dto.setRole(role);
         return dto;
     }
 
-    public enum Role {
-        CUSTOMER, OPERATOR, ADMIN
+    public UserFullDto getAsUserFullDto(){
+        UserFullDto dto = new UserFullDto();
+        dto.setId(id);
+        dto.setName(name);
+        dto.setEmail(email);
+        dto.setPassword(password);
+        dto.setRole(role);
+        return dto;
     }
 
 }

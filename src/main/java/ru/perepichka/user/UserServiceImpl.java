@@ -9,7 +9,9 @@ import ru.perepichka.appointment.Appointment;
 import ru.perepichka.appointment.dto.GetAppointmentForUserDto;
 import ru.perepichka.exception.EmailAlreadyExistsException;
 import ru.perepichka.exception.IdNotFoundException;
+import ru.perepichka.exception.UserNotFoundException;
 import ru.perepichka.user.dto.GetUserDto;
+import ru.perepichka.user.dto.UserFullDto;
 import ru.perepichka.user.specification.UserFilters;
 import ru.perepichka.user.specification.UserSpecification;
 
@@ -25,6 +27,16 @@ public class UserServiceImpl implements UserService {
     private static final String USER_NOT_FOUND_EXC = "User not found";
 
     private final UserRepository userRepository;
+
+    @Override
+    public UserFullDto findByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
+        if (!user.isActive()) {
+            throw new UserNotFoundException();
+        }
+        return user.getAsUserFullDto();
+    }
 
     @Override
     public Page<GetUserDto> getUsers(Pageable pageable) {
@@ -70,7 +82,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GetUserDto updateUserRole(String id, User.Role newRole) {
+    public GetUserDto updateUserRole(String id, Role newRole) {
         return userRepository.findById(id)
                 .map(dbUser -> {
                     dbUser.setRole(newRole);
