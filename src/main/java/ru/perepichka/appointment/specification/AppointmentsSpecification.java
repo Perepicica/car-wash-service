@@ -31,10 +31,11 @@ public class AppointmentsSpecification {
     public static Specification<Appointment> getUndoneAppointmentsForBox(String boxId) {
         return (root, query, cb) -> {
             Join<Appointment, Box> joinTable = root.join(Appointment_.box);
+            Predicate filterByStatus = cb.or(filterByBookedStatus(cb, root),
+                    filterByConfirmedStatus(cb, root));
             return cb.and(
                     filterByBox(cb, joinTable, boxId),
-                    filterByBookedStatus(cb,root),
-                    filterByConfirmedStatus(cb,root)
+                    filterByStatus
             );
         };
     }
