@@ -18,7 +18,6 @@ public class AppointmentController {
     private final AppointmentServiceImpl appointmentServiceImpl;
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('OPERATOR')")
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public Page<GetAppointmentDto> getFilteredAppointments(@RequestBody @Valid AppointmentFiltersDto dto,
                                                   Pageable pageable) {
@@ -33,14 +32,12 @@ public class AppointmentController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
     public GetAppointmentDto updateAppointment(@PathVariable(name = "id") String id, @RequestBody @Valid PutAppointmentDto dto) {
         return appointmentServiceImpl.updateAppointment(id, dto.getAsDataForBooking());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/revenue")
     public float getRevenue(@RequestBody @Valid PeriodDto dto) {
         return appointmentServiceImpl.getRevenue(dto.getAsLocalDatePeriod());

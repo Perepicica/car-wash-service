@@ -19,14 +19,12 @@ public class BoxController {
     private final BoxServiceImpl boxServiceImpl;
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('OPERATOR')")
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public Page<GetBoxDto> getAllBoxes(Pageable pageable) {
         return boxServiceImpl.getAllBoxes(pageable);
     }
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('OPERATOR')")
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public GetBoxDto getBoxById(@PathVariable(name = "id") String id) {
         return boxServiceImpl.getBox(id);
@@ -40,7 +38,6 @@ public class BoxController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
     public GetBoxDto updateBox(@PathVariable(name = "id") String id,
                                @RequestBody @Valid PostPutBoxDto boxDTO) {
@@ -48,7 +45,6 @@ public class BoxController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
     public void deleteBox(@PathVariable(name = "id") String id) {
         boxServiceImpl.deleteBox(id);

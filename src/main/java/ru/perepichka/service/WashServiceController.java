@@ -20,7 +20,6 @@ public class WashServiceController {
     private final WashServiceServiceImpl serviceServiceImpl;
 
     @PreAuthorize("isAuthenticated()")
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public Page<GetServiceDto> getAllServices(Pageable pageable) {
         return serviceServiceImpl.gelAllServices(pageable);
@@ -34,7 +33,6 @@ public class WashServiceController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
     public GetServiceDto updateServiceDiscount(@PathVariable(name = "id") String id,
                                                @RequestBody @Valid DiscountUpdateServiceDto discountDTO) {
