@@ -27,7 +27,7 @@ public class UserController {
         return userServiceImpl.getUsers(pageable);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('CUSTOMER') and #id==authentication.principal.getId)")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public GetUserDto getUserById(@PathVariable(name = "id") String id) {
